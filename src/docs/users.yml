@@ -1,0 +1,1138 @@
+/api/v1/users/register:
+  post:
+    tags:
+      - Users
+    summary: Create a new user account
+    description: Create a new user account
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              firstName:
+                type: string
+                example: Nambaje
+              lastName:
+                type: string
+                example: Edwin
+              email:
+                type: string
+                example: nambajedwin@gmail.com
+              phoneNumber:
+                type: string
+                example: "250787441511"
+              password:
+                type: string
+                example: 12345
+              location:
+                type: object
+                properties:
+                  district:
+                    type: string
+                    example: Gasabo
+                  sector:
+                    type: string
+                    example: Kacyiru
+    responses:
+      "200":
+        description: Successful operation
+        schema:
+          type: object
+          properties:
+            userId:
+              type: string
+            firstName:
+              type: string
+            lastName:
+              type: string
+            email:
+              type: string
+            phoneNumber:
+              type: string
+            tin:
+              type: string
+            nidPassport:
+              type: string
+            password:
+              type: string
+            location:
+              type: object
+              properties:
+                district:
+                  type: string
+                sector:
+                  type: string
+      "400":
+        description: Bad Request
+        schema:
+          type: object
+          properties:
+            error:
+              type: object
+              properties:
+                message:
+                  type: string
+      "500":
+        description: Internal Server Error
+        schema:
+          type: object
+          properties:
+            error:
+              type: object
+              properties:
+                message:
+                  type: string
+/api/v1/users/register/admin:
+  post:
+    tags:
+      - Admin
+    summary: Create a new user account by an Admin
+    description: Create a new user account by an Admin
+    security:
+      - {}
+      - bearerAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              firstName:
+                type: string
+                example: Nambaje
+              lastName:
+                type: string
+                example: Edwin
+              organization:
+                type: string
+                example: MINICOM
+              email:
+                type: string
+                example: nambajedwin@gmail.com
+              phoneNumber:
+                type: string
+                example: '250787441511'
+              role:
+                type: string
+                example: player
+    responses:
+      "200":
+        description: Successful operation
+        schema:
+          type: object
+          properties:
+            userId:
+              type: string
+            firstName:
+              type: string
+            lastName:
+              type: string
+            email:
+              type: string
+            phoneNumber:
+              type: string
+            password:
+              type: string
+            location:
+              type: object
+              properties:
+                district:
+                  type: string
+                sector:
+                  type: string
+      "400":
+        description: Bad Request
+        schema:
+          type: object
+          properties:
+            error:
+              type: object
+              properties:
+                message:
+                  type: string
+      '500':
+        description: Internal Server Error
+        schema:
+          type: object
+          properties:
+            error:
+              type: object
+              properties:
+                message:
+                  type: string
+
+/api/v1/users/role:
+  post:
+    tags:
+      - Roles
+    summary: Add a user role
+    description: Add a user role
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                example: "player"
+              description:
+                type: string
+                example: "Player role in the system"
+    security:
+      - {}
+      - bearerAuth: []
+
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+  get:
+    tags:
+      - Roles
+    summary: Get all user roles
+    description: Get all user roles
+    parameters:
+      - name: page
+        in: query
+      - name: pageSize
+        in: query
+    security:
+      - {}
+      - bearerAuth: []
+
+    responses:
+      "200":
+        description: Successful operation
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+/api/v1/users/role/{roleId}:
+  get:
+    tags:
+      - Roles
+    summary: Get a user role
+    description: Get a user role
+    parameters:
+      - name: roleId
+        in: path
+        required: true
+    security:
+      - {}
+      - bearerAuth: []
+
+    responses:
+      "200":
+        description: Successful operation
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+  patch:
+    tags:
+      - Roles
+    summary: Update user role
+    description: Update user role
+    parameters:
+      - name: roleId
+        in: path
+        required: true
+    security:
+      - {}
+      - bearerAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              description:
+                type: string
+                example: "Player role in the system"
+
+    responses:
+      "200":
+        description: Successful operation
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+  delete:
+    tags:
+      - Roles
+    summary: Delete user role
+    description: Delete user role
+    parameters:
+      - name: roleId
+        in: path
+        required: true
+    security:
+      - {}
+      - bearerAuth: []
+
+    responses:
+      "200":
+        description: Successful operation
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+/api/v1/users/role/all:
+  delete:
+    tags:
+      - Roles
+    summary: Delete all user roles
+    description: Delete all user roles
+    security:
+      - {}
+      - bearerAuth: []
+
+    responses:
+      "200":
+        description: Successful operation
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+
+/api/v1/users/permission:
+  post:
+    tags:
+      - Roles
+    summary: Add a user permission
+    description: Add a user permission
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                example: "Get all products"
+              description:
+                type: string
+                example: "A permission of getting products in the system"
+    security:
+      - {}
+      - bearerAuth: []
+
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+  get:
+    tags:
+      - Roles
+    summary: Get all user permission
+    description: Get all user permission
+    parameters:
+      - name: page
+        in: query
+      - name: pageSize
+        in: query
+    security:
+      - {}
+      - bearerAuth: []
+
+    responses:
+      "200":
+        description: Successful operation
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+/api/v1/users/permission/{permissionId}:
+  get:
+    tags:
+      - Roles
+    summary: Get a user permission
+    description: Get a user permission
+    parameters:
+      - name: permissionId
+        in: path
+        required: true
+    security:
+      - {}
+      - bearerAuth: []
+
+    responses:
+      "200":
+        description: Successful operation
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+  patch:
+    tags:
+      - Roles
+    summary: Update user permission
+    description: Update user permission
+    parameters:
+      - name: permissionId
+        in: path
+        required: true
+    security:
+      - {}
+      - bearerAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              description:
+                type: string
+                example: "Updated permission description in the system"
+
+    responses:
+      "200":
+        description: Successful operation
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+  delete:
+    tags:
+      - Roles
+    summary: Delete user permission
+    description: Delete user permission
+    parameters:
+      - name: permissionId
+        in: path
+        required: true
+    security:
+      - {}
+      - bearerAuth: []
+
+    responses:
+      "200":
+        description: Successful operation
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+/api/v1/users/permission/all:
+  delete:
+    tags:
+      - Roles
+    summary: Delete all user permissions
+    description: Delete all user roles
+    security:
+      - {}
+      - bearerAuth: []
+
+    responses:
+      "200":
+        description: Successful operation
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+
+/api/v1/users/roles/{roleId}/permissions:
+  post:
+    tags:
+      - Roles
+    summary: Assign or Remove a permission on a role
+    description: Assign or Remove a permission on a role
+    parameters:
+      - name: roleId
+        in: path
+        required: true
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              permissionId:
+                type: string
+                example: "c1d60fad-a981-467c-8e58-8a3b45110fa6"
+    security:
+      - {}
+      - bearerAuth: []
+
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+  get:
+    tags:
+      - Roles
+    summary: Get all permissions on a role
+    description: Get all permissions on a role
+    parameters:
+      - name: roleId
+        in: path
+        required: true
+      - name: page
+        in: query
+      - name: pageSize
+        in: query
+    security:
+      - {}
+      - bearerAuth: []
+
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+  delete:
+    tags:
+      - Roles
+    summary: Delete all permissions on a role
+    description: Delete all permissions on a role
+    parameters:
+      - name: roleId
+        in: path
+        required: true
+    security:
+      - {}
+      - bearerAuth: []
+
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+/api/v1/users/roles/{roleId}/permissions/{permissionId}:
+  get:
+    tags:
+      - Roles
+    summary: Get one permission on a role
+    description: Get one permission on a role
+    parameters:
+      - name: roleId
+        in: path
+        required: true
+      - name: permissionId
+        in: path
+        required: true
+    security:
+      - {}
+      - bearerAuth: []
+
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+/api/v1/users/roles/{roleId}/selected:
+  post:
+    tags:
+      - Roles
+    summary: Assign role a list of permissions
+    description: Assign role a list of permissions
+    parameters:
+      - name: roleId
+        in: path
+        required: true
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              permission_ids:
+                type: array
+                example:
+                  [
+                    "c1d60fad-a981-467c-8e58-8a3b45110fa6",
+                    "72963c7c-83b6-4071-9759-11de00338be0",
+                  ]
+    security:
+      - {}
+      - bearerAuth: []
+
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+  delete:
+    tags:
+      - Roles
+    summary: Remove a list of permissions
+    description: Remove a list of permissions
+    parameters:
+      - name: roleId
+        in: path
+        required: true
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              permissionIds:
+                type: array
+                example:
+                  [
+                    "c1d60fad-a981-467c-8e58-8a3b45110fa6",
+                    "72963c7c-83b6-4071-9759-11de00338be0",
+                  ]
+    security:
+      - {}
+      - bearerAuth: []
+
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+
+/api/v1/users/login:
+  post:
+    tags:
+      - Users
+    summary: Login to your user account
+    description: Login to your user account by providing a phone number or email along with the password.
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              identifier:
+                type: string
+                example: "250787441511"
+              password:
+                type: string
+                example: 12345
+
+    responses:
+      "200":
+        description: Successful operation
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                identifier:
+                  type: string
+                  description: The entered identifier (phone number or email)
+                token:
+                  type: string
+                  description: The generated authentication token
+                message:
+                  type: string
+                  description: Login Successful
+      "400":
+        description: Bad Request
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: Incorrect phone number or password
+      "404":
+        description: Account does not exist
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: Account does not exist
+      "500":
+        description: Internal Server Error
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  description: Internal Server Error message
+/api/v1/users/banned:
+  post:
+    tags:
+      - Admin
+    summary: Add a user to banned users
+    description: Add a user to banned users
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              phoneNumber:
+                type: string
+                example: "250787441511"
+    security:
+      - {}
+      - bearerAuth: []
+
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+  delete:
+    tags:
+      - Admin
+    summary: delete a banned user by id
+    description: delete a banned user by id
+    parameters:
+      - name: id
+        in: path
+        description: id of the user to remove from banned users
+        type: string
+    security:
+      - {}
+      - bearerAuth: []
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "403":
+        description: Forbidden
+      "404":
+        description: Not Found
+      "500":
+        description: Internal Server Error
+  get:
+    tags:
+      - Admin
+    summary: get all banned users
+    description: get all banned users
+    parameters:
+      - name: page
+        in: query
+      - name: pageSize
+        in: query
+    security:
+      - {}
+      - bearerAuth: []
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "403":
+        description: Forbidden
+      "500":
+        description: Internal Server Error
+
+/api/v1/users/verify-otp:
+  post:
+    tags:
+      - Users
+    summary: verify your otp code
+    description: verify your otp code
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              phoneNumber:
+                type: string
+                example: "250787441511"
+              otp:
+                type: number
+                example: 1234
+
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: invalid otp code
+      "403":
+        description: Otp code has expired
+      "500":
+        description: Internal Server Error
+/api/v1/users/all:
+  get:
+    tags:
+      - Admin
+    summary: get all users
+    description: get all users
+    parameters:
+      - name: page
+        in: query
+      - name: pageSize
+        in: query
+    security:
+      - {}
+      - bearerAuth: []
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "403":
+        description: Forbidden
+      "500":
+        description: Internal Server Error
+/api/v1/users/change-password:
+  patch:
+    tags:
+      - Users
+    summary: change old password
+    description: change old password
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              oldPassword:
+                type: string
+                example: 12345
+              newPassword:
+                type: string
+                example: 12345
+    security:
+      - {}
+      - bearerAuth: []
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+/api/v1/users/forgot-password:
+  post:
+    tags:
+      - Users
+    summary: Forgot password
+    description: Forgot password
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              phoneNumber:
+                type: string
+                example: "250787441511"
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "500":
+        description: Internal Server Error
+/api/v1/users/resend-otp:
+  post:
+    tags:
+      - Users
+    summary: resend otp code
+    description: resend otp code
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              phoneNumber:
+                type: string
+                example: "250787441511"
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "500":
+        description: Internal Server Error
+/api/v1/users/reset-password/{otpCode}:
+  post:
+    tags:
+      - Users
+    summary: Reset password
+    description: Reset password
+    parameters:
+      - name: otpCode
+        in: path
+        required: true
+        description: The otpCode  received on your phone
+        type: number
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              newPassword:
+                type: string
+                example: 12345
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "500":
+        description: Internal Server Error
+/api/v1/users/profile:
+  get:
+    tags:
+      - Users
+    summary: get user profile
+    description: get user profile
+    security:
+      - {}
+      - bearerAuth: []
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+/api/v1/users/profiles:
+  patch:
+    tags:
+      - Users
+    summary: Update user profile
+    description: Update user profile
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              firstName:
+                type: string
+                example: John
+              lastName:
+                type: string
+                example: Doe
+              gender:
+                type: string
+                example: male
+              email:
+                type: string
+                example: john@example.com
+    security:
+      - {}
+      - bearerAuth: []
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+/api/v1/users/status/{id}:
+  patch:
+    tags:
+      - Admin
+    summary: changing status of a user
+    description: changing status of a user
+    parameters:
+      - name: id
+        in: path
+        description: id of the user to change status
+        required: true
+        type: string
+    security:
+      - {}
+      - bearerAuth: []
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "403":
+        description: Forbidden
+      "404":
+        description: Not Found
+      "500":
+        description: Internal Server Error
+/api/v1/users/{id}:
+  get:
+    tags:
+      - Admin
+    summary: getting a user by id
+    description: getting a user by id
+    parameters:
+      - name: id
+        in: path
+        description: id of the user to retrieve
+        type: string
+    security:
+      - {}
+      - bearerAuth: []
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "403":
+        description: Forbidden
+      "404":
+        description: Not Found
+      "500":
+        description: Internal Server Error
+  patch:
+    tags:
+      - Admin
+    summary: update a user by id
+    description: update a user by id
+    parameters:
+      - name: id
+        in: path
+        description: id of the user to update
+        type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              firstName:
+                type: string
+                example: John
+              lastName:
+                type: string
+                example: Doe
+              gender:
+                type: string
+                example: male
+              email:
+                type: string
+                example: john@example.com
+
+    security:
+      - {}
+      - bearerAuth: []
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "403":
+        description: Forbidden
+      "404":
+        description: Not Found
+      "500":
+        description: Internal Server Error
+  delete:
+    tags:
+      - Admin
+    summary: delete a user by id
+    description: delete a user by id
+    parameters:
+      - name: id
+        in: path
+        description: id of the user to delete
+        type: string
+    security:
+      - {}
+      - bearerAuth: []
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "403":
+        description: Forbidden
+      "404":
+        description: Not Found
+      "500":
+        description: Internal Server Error
+/api/v1/users/logout:
+  post:
+    tags:
+      - Users
+    summary: Logout user
+    description: Logout the currently authenticated user, deactivating the active session token.
+    security:
+      - {}
+      - bearerAuth: []
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
