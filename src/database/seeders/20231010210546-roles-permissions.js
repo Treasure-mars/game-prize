@@ -12,7 +12,7 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
      */
-    await queryInterface.bulkInsert('RolePermissions', [
+    await queryInterface.bulkInsert('rolepermissions', [
       {
         roleId: '725d6846-3443-4f25-8a22-8c20e034aa29',
         permissionId: '7069cc93-9443-4541-bf61-b180a6f7b5d8',
@@ -77,6 +77,6 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-    await queryInterface.bulkDelete('RolePermissions', null, {})
+    await queryInterface.bulkDelete('rolepermissions', null, {})
   }
 }

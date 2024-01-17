@@ -1,7 +1,7 @@
 'use strict'
 const { Model } = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
-  class users extends Model {
+  class BannedUsers extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.Role, { foreignKey: 'roleId', as: 'userRole' })
     }
   }
-  users.init(
+  BannedUsers.init(
     {
       userId: {
         type: DataTypes.UUID,
@@ -112,10 +112,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: 'users'
+      modelName: 'BannedUsers'
     }
   )
-  users.beforeValidate(async (user, options) => {
+  BannedUsers.beforeValidate(async (user, options) => {
     const roleExists = await sequelize.models.Role.findOne({
       where: { name: user.role }
     })
@@ -126,5 +126,5 @@ module.exports = (sequelize, DataTypes) => {
       user.roleId = roleExists.roleId
     }
   })
-  return users
+  return BannedUsers
 }

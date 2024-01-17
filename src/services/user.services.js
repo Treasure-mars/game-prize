@@ -1,6 +1,8 @@
 import bcrypt from 'bcrypt'
 import { users, BannedUsers } from '../database/models'
 import dotenv from 'dotenv';
+import { Op } from 'sequelize'
+import { Jwt } from '../helpers/jwt'
 
 dotenv.config();
 
@@ -70,9 +72,156 @@ class User {
     return user.otp
   }
   
+  static async login(data) {
+    // data.password = await bcrypt.hash(data.password, saltRounds)
+    const { identifier, password } = data
+
+    if (identifier) {
+      const identifierUser = await users.findOne({
+        where: {
+          [Op.or]: [{email: identifier},
+            {phoneNumber: identifier}]
+        }
+      })
+      if (!identifierUser) {
+        return { message: 'Wrong username or password' }
+      }
+      
+      const passwordMatch = await bcrypt.compare(password, identifierUser.password);
+
+      if(!passwordMatch){
+        return { message: 'Wrong username or password' }
+      }
+
+      identifierUser.isLoggedIn = true
+      identifierUser.save()
+    }
+    const token = Jwt.generateToken(data)
+
+    return { data: {
+      identifier: identifier,
+      token: token,
+      message: 'Successfully logged in'
+    }}
+  }
+
+  static async verifyOtp(data){
+    const { phoneNumber, otp } = data
+    if(phoneNumber){
+      const identifierUser = await users.findOne({
+        where: {
+          phoneNumber: phoneNumber
+        }
+      })
+      if (!identifierUser) {
+        return { message: 'Wrong phoneNumber' }
+      }
+      if(identifierUser.otp!==otp || identifierUser.otpExpiration < new Date()){
+        return { message: 'Wrong otp' }
+      }
+      identifierUser.isVerified = true;
+      await identifierUser.save();
+      return { data: {
+        phoneNumber: phoneNumber,
+        message: 'Account verified'
+      }}
+    }
+  }
+  
+  static async changePassword(data){
+    data.oldPassword = await bcrypt.hash(data.oldPassword, saltRounds)
+    const { oldPassword, newPassword } = data
+    const identifierUser = await users.findOne({
+      where: {
+        isLoggedIn:true
+      }
+    })
+    if (!identifierUser) {
+      return { message: 'No one is logged in' }
+    }
+    const passwordMatch = await bcrypt.compare(oldPassword, identifierUser.password);
+
+    if(!passwordMatch){
+      return { message: 'Wrong password' }
+    }
+
+    identifierUser.password = await bcrypt.hash(newPassword, saltRounds)
+    identifierUser.save()
+
+    return { data: {msg: 'Password updated successfully'} }
+  }
+
+  static async resetPassword(otpCode, newPassword){
+    const identifierUser = await users.findOne({
+      where: {
+        otpCode: otpCode
+      }
+    })
+    if (!identifierUser) {
+      return { message: 'Wrong Otp' }
+    }
+
+    identifierUser.password = await bcrypt.hash(newPassword, saltRounds)
+    identifierUser.save()
+
+    return { data: {msg: 'Password updated successfully'} }
+  }
+
+  static async profile(data){
+    const identifierUser = await users.findOne({
+      where:{
+        isLoggedIn: true
+      }
+    })
+    if(!identifierUser){
+      return { message: "Profile not found" }
+    }
+    return {data:identifierUser}
+  }
+
+  static async profiles(data){
+    const identifierUser = await users.findOne({
+      where:{
+        isLoggedIn: true
+      }
+    })
+    if(!identifierUser){
+      return { message: "Profile not found" }
+    }
+    const { firstName, lastName, email } = data
+    if(firstName){
+      identifierUser.firstName = firstName
+    }
+    if(lastName){
+      identifierUser.lastName = lastName
+    }
+    if(email){
+      identifierUser.email = email
+    }
+    identifierUser.save()
+    return {data: identifierUser}
+  }
+
   static async logout(data) {
-    const token = data.split(' ')[1]
-    await Blockedtoken.create({ token })
+    const { identifier } = data
+
+    if (identifier) {
+      const identifierUser = await users.findOne({
+        where: {
+          isLoggedIn: true
+        }
+      })
+      if (!identifierUser) {
+        return { message: 'No one is logged in' }
+      }
+
+      identifierUser.isLoggedIn = false
+      identifierUser.save()
+    }
+
+    return { data: {
+      message: 'Successfully logged out'
+    }}
   }
 }
 export default User

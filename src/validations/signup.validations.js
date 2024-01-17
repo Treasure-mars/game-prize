@@ -10,7 +10,7 @@ async function SignUpValidation (data) {
     email: joi.string().email().label('email'),
     phoneNumber: joi.number().required().label('phoneNumber'),
     role: joi.string().label('role'),
-    organization: joi.string().label('organization'),
+    // organization: joi.string().label('organization'),
     password: joiPassword
       .string()
       .length(5)

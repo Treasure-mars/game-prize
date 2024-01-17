@@ -1,32 +1,43 @@
-"use strict";
-const { Model, DATE } = require("sequelize");
+'use strict'
+const { Model } = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
-  class Player extends Model {
+  class Draw extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {
+    static associate (models) {
       // define association here
+      this.belongsTo(models.Token, { foreignKey: 'drawId', as: 'drawToken' })
     }
   }
-  Player.init(
+  Draw.init(
     {
-      playerId: {
-        type: DataTypes.STRING,
+      drawId: {
+        type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
-        primaryKey: true,
-        allowNull: false,
+        primaryKey: true
       },
-      phoneNumber: {
-        type: DataTypes.STRING,
+      productId: {
+        type: DataTypes.UUID,
         allowNull: false,
-        unique: true,
+        references: {
+          model: 'Product',
+          key: 'productId'
+        }
       },
-      firstName: DataTypes.STRING,
-      lastName: DataTypes.STRING,
-      email: DataTypes.STRING,
+      startDate: {
+        type: DataTypes.DATE
+      },
+      endDate: {
+        type: DataTypes.DATE
+      },
+      isPlayed: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+      },
       createdAt: {
         type: DataTypes.DATE,
         allowNull: false,
@@ -40,8 +51,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "Player",
+      modelName: 'Draw'
     }
-  );
-  return Player;
-};
+  )
+  return Draw
+}
