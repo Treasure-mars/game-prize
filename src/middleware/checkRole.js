@@ -1,8 +1,7 @@
 export default function checkRole (role) {
   return async (req, res, next) => {
     try {
-      const userRole = req.user.role
-
+      const userRole = req.user.role;
       if (userRole !== role) {
         return res
           .status(403)

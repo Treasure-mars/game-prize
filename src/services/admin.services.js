@@ -3,6 +3,7 @@ import { users, BannedUsers } from '../database/models'
 import dotenv from 'dotenv';
 import { Op } from 'sequelize'
 import { Jwt } from '../helpers/jwt'
+import { generateRandomPassword } from '../helpers/generatePassword'
 
 dotenv.config();
 
@@ -20,8 +21,9 @@ class User {
   }
 
   static async register(data) {
-    data.password = await bcrypt.hash(data.password, saltRounds)
-    const { firstName, lastName, email, password, phoneNumber } = data
+    const passwordNotEncrypted = generateRandomPassword(5)
+    const password = await bcrypt.hash(passwordNotEncrypted, saltRounds)
+    const { firstName, lastName, email, organization, phoneNumber, role } = data
     const phoneN = User.reformatPhoneNumber(phoneNumber)
 
     if (email) {
@@ -47,7 +49,11 @@ class User {
         firstName,
         lastName,
         email,
+        organization,
         password,
+        role,
+        mustChangePassword: true,
+        isVerified: true,
         phoneNumber: phoneN
       })
       return { data: user }
@@ -56,9 +62,14 @@ class User {
         firstName,
         lastName,
         email,
+        organization,
         password,
+        role,
+        mustChangePassword: true,
+        isVerified: true,
         phoneNumber: phoneN
       })
+      user.passwordNotEncrypted = passwordNotEncrypted
       return { data: user }
     }
   }
@@ -72,44 +83,28 @@ class User {
     return user.otp
   }
   
-  static async login(data) {
+  static async banUser(data) {
     // data.password = await bcrypt.hash(data.password, saltRounds)
-    const { identifier, password } = data
+    const { phoneNumber } = data
 
-    if (identifier) {
+    if (phoneNumber) {
       const identifierUser = await users.findOne({
         where: {
-          [Op.or]: [{email: identifier},
-            {phoneNumber: identifier}]
+            phoneNumber: phoneNumber
         }
       })
       if (!identifierUser) {
-        return { message: 'Wrong username or password' }
+        return { message: 'User not found' }
       }
       
-      const passwordMatch = await bcrypt.compare(password, identifierUser.password);
-
-      if(!identifierUser.isVerified){
-        return { message: 'Account not verified' }
-      }
-
-      if(!passwordMatch){
-        return { message: 'Wrong username or password' }
-      }
-
-      const bannedUser = await BannedUsers.findOne({
-        where: {
-          [Op.or]: [{email: identifier},
-            {phoneNumber: identifier}]
-        }
+      const user = await BannedUsers.create({
+        userId: identifierUser.userId,
+        password: identifierUser.password,
+        email: identifierUser.email,
+        role: identifierUser.role,
+        phoneNumber: identifierUser.phoneNumber
       })
-      if (!bannedUser) {
-        return { message: 'Your account has been banned, contact system admin' }
-      }
-
-      data.userRole = identifierUser.role
-      identifierUser.isLoggedIn = true
-      identifierUser.save()
+      return { data: user }
     }
     const token = Jwt.generateToken(data)
 
@@ -120,29 +115,35 @@ class User {
     }}
   }
 
-  static async verifyOtp(data){
-    const { phoneNumber, otp } = data
-    if(phoneNumber){
+  static async delBanUser(data){
+    const { userId } = data
+
+    if (userId) {
       const identifierUser = await users.findOne({
         where: {
-          phoneNumber: phoneNumber
+            userId: userId
         }
       })
       if (!identifierUser) {
-        return { message: 'Wrong phoneNumber' }
+        return { message: 'User not found' }
       }
-      if(identifierUser.otp!==otp){
-        return { message: 'Wrong otp' }
-      }else if(identifierUser.otpExpiration < new Date()){
-        return { message: 'Otp expired' }
-      }
-      identifierUser.isVerified = true;
-      await identifierUser.save();
-      return { data: {
-        phoneNumber: phoneNumber,
-        message: 'Account verified'
-      }}
+      
+      const user = await BannedUsers.destroy({
+        userId: identifierUser.userId,
+        password: identifierUser.password,
+        email: identifierUser.email,
+        role: identifierUser.role,
+        phoneNumber: identifierUser.phoneNumber
+      })
+      return { data: user }
     }
+    const token = Jwt.generateToken(data)
+
+    return { data: {
+      identifier: identifier,
+      token: token,
+      message: 'Successfully logged in'
+    }}
   }
   
   static async changePassword(data){
@@ -199,8 +200,7 @@ class User {
   }
 
   static async profiles(data){
-    const { firstName, lastName, email } = data.body
-    const { identifier } = data.user
+    const { firstName, lastName, email, identifier } = data
     const identifierUser = await users.findOne({
       where:{
         phoneNumber: identifier,

@@ -9,4 +9,4 @@ const generateRandomPassword = (length) => {
   
     return password;
 };
-export default generateRandomPassword;
+module.exports = { generateRandomPassword };

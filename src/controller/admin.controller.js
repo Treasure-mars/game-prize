@@ -1,4 +1,4 @@
-import User from "../services/user.services";
+import User from "../services/admin.services";
 
 const { SMS_TOPIC } = process.env;
 class Users {
@@ -11,13 +11,11 @@ class Users {
           message,
         });
       }
-      const { phoneNumber, userId } = data;
+      const { firstName, lastName, phoneNumber, passwordNotEncrypted } = data;
       if (phoneNumber) {
-        const otpCode = await User.otProcess(phoneNumber);
-        
         return res.status(200).json({
           status: "success",
-          message: `Your OTP for comfirmation: ${otpCode}`,
+          message: `Account created for user ${firstName} ${lastName} with password ${passwordNotEncrypted}`,
         });
       }
     } catch (error) {
@@ -29,18 +27,15 @@ class Users {
     }
   }
 
-  static async login(req, res) {
+  static async banUser(req, res) {
     try {
-      const { data, message } = await User.login(req.body);
+      const { data, message } = await User.banUser(req.body);
       if (message) {
         return res.status(404).json({
           message
         });
       }
-      const { token } = data;
-      if (token) {
-        return res.status(200).json(data);
-      }
+      return res.status(200).json(data);
     } catch (error) {
       console.log("Error on logging in: ", error);
       return res.status(500).json({
@@ -52,7 +47,7 @@ class Users {
 
   static async verifyOtp(req,res){
     try{
-      const {data, message} = await User.verifyOtp(req.body)
+      const {data, message} = await User.delBanUser(req.params)
       if(message){
         return res.status(404).json({
           message
@@ -148,7 +143,7 @@ class Users {
   static async profile(req,res){
     try {
       // Access user information from the decoded token
-      const identifier = req.user.identifier;
+      const identifier = req.body.identifier;
 
       const {data, message} = await User.profile(identifier)
       if(message){
@@ -167,7 +162,7 @@ class Users {
   }
   static async profiles(req,res){
     try {
-      const {data, message} = await User.profiles(req)
+      const {data, message} = await User.profiles(req.body)
       if(message){
         return res.status(404).json({message})
       }
