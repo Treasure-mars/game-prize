@@ -11,18 +11,28 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      this.hasMany(models.Role, { foreignKey: 'roleId', as: 'permissionRole' })
+      this.hasMany(models.Permissions, { foreignKey: 'permissionId', as: 'rolePermission' })
     }
   }
   RolePermissions.init({
     roleId: {
       type: DataTypes.UUID,
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
+      references: {
+        model: 'Role',
+        key: 'roleId'
+      }
     },
     permissionId: {
       type: DataTypes.UUID,
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
+      references: {
+        model: 'Permissions',
+        key: 'permissionId'
+      }
     },
   }, {
     sequelize,

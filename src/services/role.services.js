@@ -68,17 +68,9 @@ class Roles {
   }
 
   static async deleteAllRoles(){
-    const { id } = data
-
-    if (id) {
-      const role = await Role.destroy({where: {}})
-      if(role !== 1){
-        return { message: 'Role not found' }
-      }
-    }
+    await Role.destroy({where: {}})
     return { data: {
-      roleId: id,
-      message: 'Role deleted successfully'
+      message: 'All roles deleted successfully'
     }}
   }
 

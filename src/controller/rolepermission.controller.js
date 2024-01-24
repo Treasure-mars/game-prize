@@ -1,25 +1,25 @@
-import permissions from "../services/permission.services";
+import rolePermissions from "../services/rolepermission.services";
 
 const { SMS_TOPIC } = process.env;
-class Permission {
-  static async register(req, res) {
+class RolePermission {
+  static async addRolePermission(req, res) {
     try {
-      const { data, message } = await permissions.register(req.body);
+      const { data, message } = await rolePermissions.addRolePermission(req.params, req.body);
       if (message) {
         return res.status(400).json({
           status: "fail",
           message,
         });
       }
-      const { permissionId, name } = data;
+      const { permissionId, roleId } = data;
       if (permissionId) {
         return res.status(200).json({
           status: "success",
-          message: `New role ${name} created with identification ${permissionId}`,
+          message: `New permission with id ${permissionId} created for role ${roleId}`,
         });
       }
     } catch (error) {
-      console.log("Error on registering permission: ", error);
+      console.log("Error on registering altering permission: ", error);
       return res.status(500).json({
         status: "error",
         error: error.message,
@@ -27,9 +27,9 @@ class Permission {
     }
   }
 
-  static async deleteAllPermissions(req,res){
+  static async deleteAllRolePermissions(req,res){
     try {
-      const { data, message } = await permissions.deleteAllPermissions()
+      const { data, message } = await rolePermissions.deleteAllRolePermissions()
       if(message){
         return res.status(404).json({message})
       }
@@ -46,9 +46,9 @@ class Permission {
     }
   }
 
-  static async getAllPermissions(req,res){
+  static async getAllRolePermissions(req,res){
     try {
-      const { data, message } = await permissions.getAllPermissions()
+      const { data, message } = await rolePermissions.getAllRolePermissions()
       if(message){
         return res.status(404).json({message})
       }
@@ -64,9 +64,9 @@ class Permission {
       });
     }
   }
-  static async getPermission(req,res){
+  static async getRolePermissions(req,res){
     try{
-      const {data, message} = await permissions.getPermission(req.params)
+      const {data, message} = await rolePermissions.getRolePermissions(req.params)
       if(message){
         return res.status(404).json({
           message
@@ -85,9 +85,9 @@ class Permission {
     }
   }
 
-  static async updatePermission(req,res){
+  static async updateRolePermissions(req,res){
     try{
-      const {data, message} = await permissions.updatePermission(req.params, req.body)
+      const {data, message} = await rolePermissions.updateRolePermissions(req.params, req.body)
       if(message){
         return res.status(404).json({
           message
@@ -106,9 +106,9 @@ class Permission {
     }
   }
 
-  static async deletePermission(req,res){
+  static async deleteRolePermissions(req,res){
     try{
-      const {data, message} = await permissions.deletePermission(req.params)
+      const {data, message} = await rolePermissions.deleteRolePermissions(req.params)
       if(message){
         return res.status(404).json({
           message
@@ -127,4 +127,4 @@ class Permission {
     }
   }
 }
-export default Permission;
+export default RolePermission;

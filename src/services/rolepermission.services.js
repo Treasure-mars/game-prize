@@ -1,4 +1,4 @@
-import { Permissions } from '../database/models'
+import { RolePermissions } from '../database/models'
 import dotenv from 'dotenv';
 import { Op } from 'sequelize'
 import { Jwt } from '../helpers/jwt'
@@ -7,52 +7,47 @@ import { generateRandomPassword } from '../helpers/generatePassword'
 dotenv.config();
 
 const saltRounds = Number(process.env.SALTROUNDS)
-class permissions {
-  static reformatPhoneNumber(phoneNumber) {
-    const numericDigits = phoneNumber.replace(/\D/g, '');
-
-    if (numericDigits.length < 9) {
-      return "Invalid Phone Number";
-    }
-    const last9Digits = numericDigits.slice(-9);
-    const formattedPhoneNumber = `250${last9Digits}`;
-    return formattedPhoneNumber;
-  }
-
-  static async register(data) {
-    const { name, description } = data
-    console.log(data)
-    if (name) {
-      const permissionRole = await Permissions.findOne({
+class rolePermissions {
+  static async addRolePermission(role, data) {
+    const { permissionId } = data
+    const { roleId } = role
+    if (permissionId && roleId) {
+      const rolePermissionFound = await RolePermissions.findOne({
         where: {
-            name
+          roleId: roleId,
+          permissionId: permissionId
         }
       })
-      if (permissionRole) {
-        return { message: 'Permission name already exists' }
+      if (rolePermissionFound) {
+        await RolePermissions.destroy({
+          where: {
+            roleId,
+            permissionId
+          }
+        })
+        return { message: "Role permission deleted successfully" }
       }
-    }
-
-    const permissionCreated = await Permissions.create({
-        name,
-        description
+      const rolePermissionCreated = await RolePermissions.create({
+        roleId,
+        permissionId
       })
-      return { data: permissionCreated }
+      return { data: rolePermissionCreated }
+    }
   }
  
-  static async getAllPermissions(){
-    const allPermissions = await Permissions.findAll()
-    if (allPermissions.length === 0) {
+  static async getAllRolePermissions(){
+    const allRolePermissions = await RolePermissions.findAll()
+    if (allRolePermissions.length === 0) {
       return { message: 'No permissions found' }
     }
-    return { data: { allPermissions, msg: 'success' } }
+    return { data: { allRolePermissions, msg: 'success' } }
   }
 
-  static async deletePermission(data){
+  static async deleteRolePermissions(data){
     const { id } = data
 
     if (id) {
-      const permission = await Permissions.destroy({
+      const permission = await RolePermissions.destroy({
         where: {
           permissionId: id
         }
@@ -67,19 +62,19 @@ class permissions {
     }}
   }
 
-  static async deleteAllPermissions(){
-    await Permissions.destroy({where: {}})
+  static async deleteAllRolePermissions(){
+    await RolePermissions.destroy({where: {}})
     return { data: {
       message: 'All permissions deleted successfully'
     }}
   }
 
-  static async updatePermission(params, body){
+  static async updateRolePermissions(params, body){
     const { id } = params
     const { name, description } = body
 
     if (id) {
-      const permissionRole = await Permissions.findOne({
+      const permissionRole = await RolePermissions.findOne({
         where: {
           permissionId: id
         }
@@ -101,9 +96,9 @@ class permissions {
     }}
   }
 
-  static async getPermission(data){
+  static async getRolePermissions(data){
     const { id } = data
-    const permission = await Permissions.findOne({
+    const permission = await RolePermissions.findOne({
       where: {
         permissionId: id
       }
@@ -114,4 +109,4 @@ class permissions {
     return { data: { permission, msg: 'success' } }
   }
 }
-export default permissions
+export default rolePermissions
