@@ -1,7 +1,6 @@
 import express from "express";
 import Users from "../controller/user.controller";
 import signupValidate from "../middleware/signUpValidate";
-import checkRole from "../middleware/checkRole";
 import { checkUserExist } from "../middleware/checkUser";
 import verifyToken from "../middleware/verifyToken";
 
@@ -10,7 +9,7 @@ const router = express.Router();
 // User
 router.post("/register", signupValidate, checkUserExist, Users.register)
 router.post("/login", Users.login)
-router.post("/verify-otp", verifyToken, Users.verifyOtp)
+router.post("/verify-otp", Users.verifyOtp)
 router.patch("/change-password", verifyToken, Users.changePassword)
 router.post("/forgot-password", Users.forgotPassword)
 router.post("/resend-otp", Users.resendOtp)

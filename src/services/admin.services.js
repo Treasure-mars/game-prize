@@ -104,146 +104,113 @@ class User {
         role: identifierUser.role,
         phoneNumber: identifierUser.phoneNumber
       })
-      return { data: user }
     }
-    const token = Jwt.generateToken(data)
 
     return { data: {
-      identifier: identifier,
-      token: token,
-      message: 'Successfully logged in'
+      identifier: phoneNumber,
+      message: 'Account have been banned successfully'
     }}
   }
 
-  static async delBanUser(data){
-    const { userId } = data
+  static async banUserDel(data){
+    const { id } = data
 
-    if (userId) {
-      const identifierUser = await users.findOne({
+    if (id) {
+      const user = await BannedUsers.destroy({
         where: {
-            userId: userId
+          userId: id
         }
       })
-      if (!identifierUser) {
+      if(user !== 1){
         return { message: 'User not found' }
       }
-      
-      const user = await BannedUsers.destroy({
-        userId: identifierUser.userId,
-        password: identifierUser.password,
-        email: identifierUser.email,
-        role: identifierUser.role,
-        phoneNumber: identifierUser.phoneNumber
-      })
-      return { data: user }
     }
-    const token = Jwt.generateToken(data)
-
     return { data: {
-      identifier: identifier,
-      token: token,
-      message: 'Successfully logged in'
+      userId: id,
+      message: 'Account have been unbanned successfully'
     }}
   }
   
-  static async changePassword(data){
-    data.oldPassword = await bcrypt.hash(data.oldPassword, saltRounds)
-    const { oldPassword, newPassword } = data
-    const identifierUser = await users.findOne({
-      where: {
-        isLoggedIn:true
-      }
-    })
-    if (!identifierUser) {
-      return { message: 'No one is logged in' }
+  static async getBannedUser(page, pageSize){
+    const allUsersBanned = await BannedUsers.findAll({
+      limit: pageSize,
+    });
+    if (allUsersBanned.length === 0) {
+      return { message: 'No banned users' }
     }
-    const passwordMatch = await bcrypt.compare(oldPassword, identifierUser.password);
-
-    if(!passwordMatch){
-      return { message: 'Wrong password' }
-    }
-
-    identifierUser.password = await bcrypt.hash(newPassword, saltRounds)
-    identifierUser.save()
-
-    return { data: {msg: 'Password updated successfully'} }
+    return { data: { allUsersBanned, msg: 'success' } }
   }
 
-  static async resetPassword(otpCode, newPassword){
-    const identifierUser = await users.findOne({
-      where: {
-        otpCode: otpCode
-      }
-    })
-    if (!identifierUser) {
-      return { message: 'Wrong Otp' }
+  static async getAllUsers(page, pageSize){
+    const allUsers = await users.findAll({
+      limit: pageSize
+    });
+    if (allUsers.length === 0) {
+      return { message: 'No users found' }
     }
-
-    identifierUser.password = await bcrypt.hash(newPassword, saltRounds)
-    identifierUser.save()
-
-    return { data: {msg: 'Password updated successfully'} }
+    return { data: { Users: allUsers, msg: 'success' } }
   }
 
-  static async profile(identifier){
-    const identifierUser = await users.findOne({
-      where:{
-        [Op.or]: [{email: identifier},
-          {phoneNumber: identifier}],
-        isLoggedIn: true
-      }
-    })
-    if(!identifierUser){
-      return { message: "Profile not found" }
-    }
-    return {data:identifierUser}
-  }
+  static async deleteUser(data){
+    const { id } = data
 
-  static async profiles(data){
-    const { firstName, lastName, email, identifier } = data
-    const identifierUser = await users.findOne({
-      where:{
-        phoneNumber: identifier,
-        isLoggedIn: true
-      }
-    })
-    if(!identifierUser){
-      return { message: "Profile not found" }
-    }
-    if(firstName){
-      identifierUser.firstName = firstName
-    }
-    if(lastName){
-      identifierUser.lastName = lastName
-    }
-    if(email){
-      identifierUser.email = email
-    }
-    identifierUser.save()
-    return {data: identifierUser}
-  }
-
-  static async logout(data) {
-    const { identifier } = data
-
-    if (identifier) {
-      const identifierUser = await users.findOne({
+    if (id) {
+      const user = await users.destroy({
         where: {
-          phoneNumber: identifier,
-          isLoggedIn: true
+          userId: id
         }
       })
-      if (!identifierUser) {
-        return { message: 'No one is logged in' }
+      if(user !== 1){
+        return { message: 'User not found' }
       }
+    }
+    return { data: {
+      userId: id,
+      message: 'User deleted successfully'
+    }}
+  }
 
-      identifierUser.isLoggedIn = false
+  static async updateUser(params, body){
+    const { id } = params
+    const { firstName, lastName, email } = body
+
+    if (id) {
+      const identifierUser = await users.findOne({
+        where: {
+          userId: id
+        }
+      })
+      if(!identifierUser){
+        return { message: "Profile not found" }
+      }
+      if(firstName){
+        identifierUser.firstName = firstName
+      }
+      if(lastName){
+        identifierUser.lastName = lastName
+      }
+      if(email){
+        identifierUser.email = email
+      }
       identifierUser.save()
     }
-
     return { data: {
-      message: 'Successfully logged out'
+      userId: id,
+      message: 'User updated successfully'
     }}
+  }
+
+  static async getUser(data){
+    const { id } = data
+    const user = await users.findOne({
+      where: {
+        userId: id
+      }
+    })
+    if (!user) {
+      return { message: 'User not found' }
+    }
+    return { data: { user: user, msg: 'success' } }
   }
 }
 export default User

@@ -73,7 +73,7 @@ class Users {
 
   static async changePassword(req,res){
     try {
-      const { data, message } = await User.changePassword(req.body)
+      const { data, message } = await User.changePassword(req.body, req.user)
       if(message){
         return res.status(404).json({message})
       }
@@ -184,7 +184,7 @@ class Users {
   }
   static async logout(req,res){
     try {
-      const {data, message} = await User.logout(req.body)
+      const {data, message} = await User.logout(req.user)
       if(message){
         return res.status(404).json({message})
       }

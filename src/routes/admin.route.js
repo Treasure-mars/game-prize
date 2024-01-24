@@ -8,15 +8,13 @@ import verifyToken from "../middleware/verifyToken";
 const router = express.Router();
 
 // User
+router.get("/:id", verifyToken, checkRole('admin'), Admin.identifiedUser)
+router.patch("/:id", verifyToken, checkRole('admin'), Admin.updateUser)
+router.delete("/:id", verifyToken, checkRole('admin'), Admin.deleteUser)
+router.delete("/banned/:id", verifyToken, checkRole('admin'), Admin.banUserDel)
 router.post("/register/admin", verifyToken, checkUserExist, checkRole('admin'), adminValidate, Admin.register)
 router.post("/banned", verifyToken, checkRole('admin'), Admin.banUser)
-router.delete("/banned/:userId", verifyToken, checkRole('admin'), Admin.verifyOtp)
-router.patch("/change-password", verifyToken, checkRole,  Admin.changePassword)
-router.post("/forgot-password", verifyToken, checkRole, Admin.forgotPassword)
-router.post("/resend-otp", verifyToken, checkRole, Admin.resendOtp)
-router.post("/reset-password/:otpCode", verifyToken, checkRole, Admin.resetPassword)
-router.get("/profile", verifyToken, checkRole, Admin.profile)
-router.patch("/profiles", verifyToken, checkRole, Admin.profiles)
-router.post("/logout", verifyToken, checkRole, Admin.logout)
+router.get("/banned", verifyToken, checkRole('admin'), Admin.allBannedUser)
+router.get("/all", verifyToken, checkRole('admin'), Admin.allUsers)
 
 export default router;

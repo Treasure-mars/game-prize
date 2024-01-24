@@ -73,7 +73,6 @@ class User {
   }
   
   static async login(data) {
-    // data.password = await bcrypt.hash(data.password, saltRounds)
     const { identifier, password } = data
 
     if (identifier) {
@@ -93,6 +92,10 @@ class User {
         return { message: 'Account not verified' }
       }
 
+      if(!identifierUser.isActive){
+        return { message: 'Account is disactivated' }
+      }
+
       if(!passwordMatch){
         return { message: 'Wrong username or password' }
       }
@@ -103,7 +106,7 @@ class User {
             {phoneNumber: identifier}]
         }
       })
-      if (!bannedUser) {
+      if (bannedUser) {
         return { message: 'Your account has been banned, contact system admin' }
       }
 
@@ -145,16 +148,19 @@ class User {
     }
   }
   
-  static async changePassword(data){
-    data.oldPassword = await bcrypt.hash(data.oldPassword, saltRounds)
+  static async changePassword(data, user){
+    // data.oldPassword = await bcrypt.hash(data.oldPassword, saltRounds)
     const { oldPassword, newPassword } = data
+    const { identifier } = user
     const identifierUser = await users.findOne({
       where: {
-        isLoggedIn:true
+        [Op.or]:[{email: identifier},
+        {phoneNumber: identifier}]
       }
     })
+
     if (!identifierUser) {
-      return { message: 'No one is logged in' }
+      return { message: 'User not found' }
     }
     const passwordMatch = await bcrypt.compare(oldPassword, identifierUser.password);
 
@@ -171,7 +177,7 @@ class User {
   static async resetPassword(otpCode, newPassword){
     const identifierUser = await users.findOne({
       where: {
-        otpCode: otpCode
+        otp: otpCode
       }
     })
     if (!identifierUser) {
@@ -229,7 +235,7 @@ class User {
     if (identifier) {
       const identifierUser = await users.findOne({
         where: {
-          phoneNumber: identifier,
+          [Op.or]:[{phoneNumber: identifier}, {email: identifier}],
           isLoggedIn: true
         }
       })
