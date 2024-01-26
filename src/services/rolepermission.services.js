@@ -1,4 +1,4 @@
-import { RolePermissions } from '../database/models'
+import { RolePermission, Role, Permission, sequelize } from '../database/models'
 import dotenv from 'dotenv';
 import { Op } from 'sequelize'
 import { Jwt } from '../helpers/jwt'
@@ -8,39 +8,61 @@ dotenv.config();
 
 const saltRounds = Number(process.env.SALTROUNDS)
 class rolePermissions {
-  static async addRolePermission(role, data) {
-    const { permissionId } = data
-    const { roleId } = role
-    if (permissionId && roleId) {
-      const rolePermissionFound = await RolePermissions.findOne({
-        where: {
-          roleId: roleId,
-          permissionId: permissionId
-        }
-      })
-      if (rolePermissionFound) {
-        await RolePermissions.destroy({
-          where: {
-            roleId,
-            permissionId
-          }
-        })
-        return { message: "Role permission deleted successfully" }
+  static async addRolePermission(params, body) {
+    try{  
+      const { roleId } = params
+      const { permissionId } = body
+      let role = await Role.findByPk(roleId);
+      let permission = await Permission.findByPk(permissionId);
+      if(!role) {
+        return { message: 'Role not found' };
       }
-      const rolePermissionCreated = await RolePermissions.create({
-        roleId,
-        permissionId
+      if (!permission) {
+        return { message: "Permission not found!" }
+      }
+      //populate GroupUser join table
+      const rolePermissionCreated = await RolePermission.create({
+        role,
+        permission
       })
-      return { data: rolePermissionCreated }
+      
+      return { data: { rolePermissionCreated, msg: 'success' } };
+    } catch (error) {
+      console.log('Error on adding role permissions: ', error);
+      return { status: 'error', error: error.message };
     }
   }
  
-  static async getAllRolePermissions(){
-    const allRolePermissions = await RolePermissions.findAll()
-    if (allRolePermissions.length === 0) {
-      return { message: 'No permissions found' }
+  static async getAllRolePermissions(params) {
+    try {
+      const { roleId } = params;
+  
+      // Find the role by roleId
+      const role = await Role.findByPk(roleId, {
+        include: [
+          {
+            model: Permissions,
+            as: 'rolePermissions', // This should match the alias used in Role model
+            through: { attributes: [] }, // To exclude RolePermissions from the result
+          },
+        ],
+      });
+  
+      if (!role) {
+        return { message: 'Role not found' };
+      }
+  
+      const permissions = role.rolePermissions;
+  
+      if (permissions.length === 0) {
+        return { message: 'No permissions found for the role' };
+      }
+  
+      return { data: { permissions, msg: 'success' } };
+    } catch (error) {
+      console.log('Error on getting all roles permissions: ', error);
+      return { status: 'error', error: error.message };
     }
-    return { data: { allRolePermissions, msg: 'success' } }
   }
 
   static async deleteRolePermissions(data){
@@ -96,17 +118,39 @@ class rolePermissions {
     }}
   }
 
-  static async getRolePermissions(data){
-    const { id } = data
-    const permission = await RolePermissions.findOne({
-      where: {
-        permissionId: id
+  static async getRolePermissions(params){
+    try {
+      const { roleId, permissionId } = params;
+  
+      // Find the role by roleId
+      const role = await Role.findByPk(roleId, {
+        include: [
+          {
+            model: Permissions,
+            as: 'rolePermissions',
+            through: { attributes: [] },
+            where: {
+              permissionId
+            }
+          },
+        ],
+      });
+  
+      if (!role) {
+        return { message: 'Role not found' };
       }
-    })
-    if (!permission) {
-      return { message: 'Permission not found' }
+  
+      const permissions = role.rolePermissions;
+  
+      if (permissions.length === 0) {
+        return { message: 'No permissions found for the role' };
+      }
+  
+      return { data: { permissions, msg: 'success' } };
+    } catch (error) {
+      console.log('Error on getting role permissions: ', error);
+      return { status: 'error', error: error.message };
     }
-    return { data: { permission, msg: 'success' } }
   }
 }
 export default rolePermissions

@@ -48,7 +48,7 @@ class RolePermission {
 
   static async getAllRolePermissions(req,res){
     try {
-      const { data, message } = await rolePermissions.getAllRolePermissions()
+      const { data, message } = await rolePermissions.getAllRolePermissions(req.params)
       if(message){
         return res.status(404).json({message})
       }
@@ -72,8 +72,8 @@ class RolePermission {
           message
         });
       }
-      const {permission} = data
-      if(permission){
+      const {permissions} = data
+      if(permissions){
         return res.status(200).json(data);
       }
     } catch (error) {

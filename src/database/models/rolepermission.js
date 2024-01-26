@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class RolePermissions extends Model {
+  class RolePermission extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,32 +11,22 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.hasMany(models.Role, { foreignKey: 'roleId', as: 'permissionRole' })
-      this.hasMany(models.Permissions, { foreignKey: 'permissionId', as: 'rolePermission' })
+      this.belongsTo(models.Role, { foreignKey: 'roleId', as: 'rolePermission' });
+  this.belongsTo(models.Permission, { foreignKey: 'permissionId', as: 'permissionRole' });
     }
   }
-  RolePermissions.init({
+  RolePermission.init({
     roleId: {
       type: DataTypes.UUID,
-      allowNull: false,
-      primaryKey: true,
-      references: {
-        model: 'Role',
-        key: 'roleId'
-      }
+      primaryKey: true
     },
     permissionId: {
       type: DataTypes.UUID,
-      allowNull: false,
-      primaryKey: true,
-      references: {
-        model: 'Permissions',
-        key: 'permissionId'
-      }
-    },
+      primaryKey: true
+    }
   }, {
     sequelize,
-    modelName: 'RolePermissions',
+    modelName: 'RolePermission',
   });
-  return RolePermissions;
+  return RolePermission;
 };
