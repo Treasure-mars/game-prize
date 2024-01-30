@@ -1,4 +1,4 @@
-import { Permissions } from '../database/models'
+import { Permission } from '../database/models'
 import dotenv from 'dotenv';
 import { Op } from 'sequelize'
 import { Jwt } from '../helpers/jwt'
@@ -23,7 +23,7 @@ class permissions {
     const { name, description } = data
     console.log(data)
     if (name) {
-      const permissionRole = await Permissions.findOne({
+      const permissionRole = await Permission.findOne({
         where: {
             name
         }
@@ -33,7 +33,7 @@ class permissions {
       }
     }
 
-    const permissionCreated = await Permissions.create({
+    const permissionCreated = await Permission.create({
         name,
         description
       })
@@ -41,7 +41,7 @@ class permissions {
   }
  
   static async getAllPermissions(){
-    const allPermissions = await Permissions.findAll()
+    const allPermissions = await Permission.findAll()
     if (allPermissions.length === 0) {
       return { message: 'No permissions found' }
     }
@@ -52,7 +52,7 @@ class permissions {
     const { id } = data
 
     if (id) {
-      const permission = await Permissions.destroy({
+      const permission = await Permission.destroy({
         where: {
           permissionId: id
         }
@@ -68,7 +68,7 @@ class permissions {
   }
 
   static async deleteAllPermissions(){
-    await Permissions.destroy({where: {}})
+    await Permission.destroy({where: {}})
     return { data: {
       message: 'All permissions deleted successfully'
     }}
@@ -79,7 +79,7 @@ class permissions {
     const { name, description } = body
 
     if (id) {
-      const permissionRole = await Permissions.findOne({
+      const permissionRole = await Permission.findOne({
         where: {
           permissionId: id
         }
@@ -103,7 +103,7 @@ class permissions {
 
   static async getPermission(data){
     const { id } = data
-    const permission = await Permissions.findOne({
+    const permission = await Permission.findOne({
       where: {
         permissionId: id
       }

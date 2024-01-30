@@ -20,19 +20,23 @@ class rolePermissions {
       if (!permission) {
         return { message: "Permission not found!" }
       }
+
       //populate GroupUser join table
       const rolePermissionCreated = await RolePermission.create({
-        role,
-        permission
+        roleId: role.roleId,
+        permissionId: permission.permissionId,
+        createdAt: Date.now(),
+        updatedAt: Date.now()
+      }, {
+        returning: ['roleId', 'permissionId', 'createdAt', 'updatedAt']
       })
-      
       return { data: { rolePermissionCreated, msg: 'success' } };
     } catch (error) {
       console.log('Error on adding role permissions: ', error);
-      return { status: 'error', error: error.message };
+      return { status: 'error', message: error.message };
     }
   }
- 
+
   static async getAllRolePermissions(params) {
     try {
       const { roleId } = params;
@@ -41,7 +45,7 @@ class rolePermissions {
       const role = await Role.findByPk(roleId, {
         include: [
           {
-            model: Permissions,
+            model: Permission,
             as: 'rolePermissions', // This should match the alias used in Role model
             through: { attributes: [] }, // To exclude RolePermissions from the result
           },
@@ -65,56 +69,102 @@ class rolePermissions {
     }
   }
 
-  static async deleteRolePermissions(data){
-    const { id } = data
+  static async deleteRolePermissions(params, body){
+    const { roleId } = params
+    const { permissionIds } = body
 
-    if (id) {
-      const permission = await RolePermissions.destroy({
-        where: {
-          permissionId: id
-        }
-      })
-      if(permission !== 1){
-        return { message: 'Permission not found' }
-      }
+    if(!roleId){
+      return { message: 'Please provide roleId' }
     }
+
+    const rolePermissionPromises = permissionIds.map(async (permission_id) => {
+      try {
+        const rolePermissionFound = await RolePermission.findOne({
+          where: {
+            roleId: roleId,
+            permissionId: permission_id
+          },
+          attributes: ['roleId', 'permissionId']
+        })
+
+        if (!rolePermissionFound) {
+          return { message: `Role with id ${roleId} doesn't have this permission with id ${permission_id}` };
+        }
+    
+        const rolePermissionDeleted = await RolePermission.destroy({
+          where: {
+            roleId: roleId,
+            permissionId: permission_id
+          }
+        });
+
+        if(rolePermissionDeleted == 1){
+          return {
+            message: `Permission with id ${permission_id} removed for role ${roleId}`
+          }
+        }
+    
+        return rolePermissionDeleted;
+      } catch (error) {
+        console.error(`Error deleting role permission for permission_id ${permission_id}:`, error);
+        return { error: error.message };
+      }
+    });
+    
+    const deletedRolePermissions = await Promise.all(rolePermissionPromises);
     return { data: {
-        permissionId: id,
-      message: 'Permission deleted successfully'
+      deletedRolePermissions
     }}
   }
 
-  static async deleteAllRolePermissions(){
-    await RolePermissions.destroy({where: {}})
+  static async deleteAllRolePermissions(params){
+    await RolePermission.destroy({where: {
+      roleId: params.roleId
+    }})
     return { data: {
-      message: 'All permissions deleted successfully'
+      msg: `All permissions deleted successfully for role with id ${params.roleId}`
     }}
   }
 
   static async updateRolePermissions(params, body){
-    const { id } = params
-    const { name, description } = body
+    const { roleId } = params
+    const { permission_ids } = body
 
-    if (id) {
-      const permissionRole = await RolePermissions.findOne({
-        where: {
-          permissionId: id
-        }
-      })
-      if (!permissionRole) {
-        return { message: 'Permission name not found' }
-      }
-      if(name){
-        permissionRole.name = name
-      }
-      if(description){
-        permissionRole.description = description
-      }
-      permissionRole.save()
+    if(!roleId){
+      return { message: 'Please provide roleId' }
     }
+
+    let role = await Role.findByPk(roleId);
+    if(!role) {
+      return { message: 'Role not found' };
+    }
+
+    const rolePermissionPromises = permission_ids.map(async (permission_id) => {
+      try {
+        const permission = await Permission.findByPk(permission_id);
+        if (!permission) {
+          return { message: `Permission not found with id ${permission_id}` };
+        }
+    
+        const rolePermissionCreated = await RolePermission.create({
+          roleId: roleId,
+          permissionId: permission.permissionId,
+          createdAt: Date.now(),
+          updatedAt: Date.now(),
+        }, {
+          returning: ['roleId', 'permissionId', 'createdAt', 'updatedAt'],
+        });
+    
+        return rolePermissionCreated;
+      } catch (error) {
+        console.error(`Error creating role permission for permission_id ${permission_id}:`, error);
+        return { error: error.message };
+      }
+    });
+    
+    const createdRolePermissions = await Promise.all(rolePermissionPromises);
     return { data: {
-      permissionId: id,
-      message: 'Permission updated successfully'
+      createdRolePermissions
     }}
   }
 
@@ -126,7 +176,7 @@ class rolePermissions {
       const role = await Role.findByPk(roleId, {
         include: [
           {
-            model: Permissions,
+            model: Permission,
             as: 'rolePermissions',
             through: { attributes: [] },
             where: {

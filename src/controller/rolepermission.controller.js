@@ -17,6 +17,11 @@ class RolePermission {
           status: "success",
           message: `New permission with id ${permissionId} created for role ${roleId}`,
         });
+      }else{
+        return res.status(200).json({
+          status: "success",
+          message: `New permission with id ${req.body.permissionId} created for role ${req.params.roleId}`,
+        });
       }
     } catch (error) {
       console.log("Error on registering altering permission: ", error);
@@ -29,7 +34,7 @@ class RolePermission {
 
   static async deleteAllRolePermissions(req,res){
     try {
-      const { data, message } = await rolePermissions.deleteAllRolePermissions()
+      const { data, message } = await rolePermissions.deleteAllRolePermissions(req.params)
       if(message){
         return res.status(404).json({message})
       }
@@ -93,8 +98,8 @@ class RolePermission {
           message
         });
       }
-      const {permissionId} = data
-      if(permissionId){
+      const {createdRolePermissions} = data
+      if(createdRolePermissions){
         return res.status(200).json(data);
       }
     } catch (error) {
@@ -108,18 +113,18 @@ class RolePermission {
 
   static async deleteRolePermissions(req,res){
     try{
-      const {data, message} = await rolePermissions.deleteRolePermissions(req.params)
+      const {data, message} = await rolePermissions.deleteRolePermissions(req.params, req.body)
       if(message){
         return res.status(404).json({
           message
         });
       }
-      const {permissionId} = data
-      if(permissionId){
+      const {deletedRolePermissions} = data
+      if(deletedRolePermissions){
         return res.status(200).json(data);
       }
     } catch (error) {
-      console.log("Error on deleting role permission: ", error);
+      console.log("Error on deleting user role: ", error);
       return res.status(500).json({
         status: "error",
         error: error.message,
