@@ -1,4 +1,5 @@
 'use strict'
+const { generateRandomNumber } = require('../../helpers/randomNumberGenerator')
 const { Model } = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
   class Token extends Model {
@@ -20,8 +21,8 @@ module.exports = (sequelize, DataTypes) => {
     {
       tokenId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
-        primaryKey: true
+        // allowNull: false,
+        unique: true
       },
       userId: {
         type: DataTypes.UUID,
@@ -44,7 +45,11 @@ module.exports = (sequelize, DataTypes) => {
           key: 'drawId'
         }
       },
-      referenceId: DataTypes.UUID,
+      referenceId: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true
+      },
       createdAt: {
         type: DataTypes.DATE,
         allowNull: false,
@@ -58,14 +63,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: 'Token'
-    }, 
-    {
+      modelName: 'Token',
       hooks: {
-        beforeValidate: (token, options) => {
-          // token.tokenID = generateRandomNumber(60000000, 69999999);
+        beforeCreate: (token, options) => {
+          token.tokenId = generateRandomNumber(60000000, 69999999);
         },
-      },
+      }
     }
   )
   return Token

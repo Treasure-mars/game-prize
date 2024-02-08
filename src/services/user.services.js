@@ -110,7 +110,7 @@ class User {
         return { message: 'Your account has been banned, contact system admin' }
       }
 
-      data.userRole = identifierUser.role
+      data.userRole = identifierUser.roleId
       identifierUser.isLoggedIn = true
       identifierUser.save()
     }
