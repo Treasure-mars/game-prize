@@ -8,7 +8,7 @@ async function SignUpValidation (data) {
     firstName: joi.string().min(3).required().label('firstName'),
     lastName: joi.string().min(3).required().label('lastName'),
     email: joi.string().email().label('email'),
-    phoneNumber: joi.number().required().label('phoneNumber'),
+    phoneNumber: joi.string().min(12).required().label('phoneNumber'),
     role: joi.string().label('role'),
     organization: joi.string().label('organization'),
     password: joiPassword

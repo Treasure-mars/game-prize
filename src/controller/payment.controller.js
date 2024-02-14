@@ -19,7 +19,7 @@ class Payment {
         });
       }
     } catch (error) {
-      console.log("Error on registering product: ", error);
+      console.log("Error on registering payment: ", error);
       return res.status(500).json({
         status: "error",
         error: error.message,
@@ -36,7 +36,7 @@ class Payment {
         return res.status(200).json({data})
       }
     } catch (error) {
-      console.log("Error on updating product in: ", error);
+      console.log(`Error on updating payment with id : ${req.params.paymentId}`, error);
       return res.status(500).json({
         status: "error",
         error: error.message
@@ -53,7 +53,7 @@ class Payment {
         return res.status(200).json({data})
       }
     } catch (error) {
-      console.log("Error on getting product in: ", error);
+      console.log(`Error on getting payment with id : ${req.params.paymentId}`, error);
       return res.status(500).json({
         status: "error",
         error: error.message
@@ -70,7 +70,7 @@ class Payment {
         return res.status(200).json({data})
       }
     } catch (error) {
-      console.log("Error on deleting product in: ", error);
+      console.log(`Error on deleting payment with id : ${req.params.paymentId}`, error);
       return res.status(500).json({
         status: "error",
         error: error.message
@@ -87,7 +87,7 @@ class Payment {
         return res.status(200).json({data})
       }
     } catch (error) {
-      console.log("Error on getting all products in: ", error);
+      console.log("Error on getting all payments in: ", error);
       return res.status(500).json({
         status: "error",
         error: error.message

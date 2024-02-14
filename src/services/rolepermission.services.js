@@ -37,10 +37,10 @@ class rolePermissions {
     }
   }
 
-  static async getAllRolePermissions(params) {
+  static async getAllRolePermissions(params, page, pageSize) {
     try {
       const { roleId } = params;
-  
+      const offset = (page - 1) * pageSize
       // Find the role by roleId
       const role = await Role.findByPk(roleId, {
         include: [
@@ -50,6 +50,8 @@ class rolePermissions {
             through: { attributes: [] }, // To exclude RolePermissions from the result
           },
         ],
+        limit: pageSize,
+        offset: offset
       });
   
       if (!role) {
@@ -168,7 +170,7 @@ class rolePermissions {
     }}
   }
 
-  static async getRolePermissions(params){
+  static async getRolePermission(params){
     try {
       const { roleId, permissionId } = params;
   

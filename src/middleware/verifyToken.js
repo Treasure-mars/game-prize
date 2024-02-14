@@ -22,6 +22,7 @@ export default function verifyToken(req, res, next) {
       req.user = {
         identifier: decoded.identifier,
         role: decoded.userRole,
+        userId: decoded.userId,
       };
       next();
     });

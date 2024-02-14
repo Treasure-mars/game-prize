@@ -48,7 +48,8 @@ class Permission {
 
   static async getAllPermissions(req,res){
     try {
-      const { data, message } = await permissions.getAllPermissions()
+      const { page, pageSize } = req.query;
+      const { data, message } = await permissions.getAllPermissions(page, pageSize)
       if(message){
         return res.status(404).json({message})
       }
@@ -77,7 +78,7 @@ class Permission {
         return res.status(200).json(data);
       }
     } catch (error) {
-      console.log("Error on getting role permission: ", error);
+      console.log(`Error on getting role permission with id : ${req.params.permissionId}`, error);
       return res.status(500).json({
         status: "error",
         error: error.message,
@@ -98,7 +99,7 @@ class Permission {
         return res.status(200).json(data);
       }
     } catch (error) {
-      console.log("Error on updating user role: ", error);
+      console.log(`Error on updating role permission with id : ${req.params.permissionId}`, error);
       return res.status(500).json({
         status: "error",
         error: error.message,
@@ -119,7 +120,7 @@ class Permission {
         return res.status(200).json(data);
       }
     } catch (error) {
-      console.log("Error on deleting role permission: ", error);
+      console.log(`Error on deleting role permission with id : ${req.params.permissionId}`, error);
       return res.status(500).json({
         status: "error",
         error: error.message,

@@ -58,7 +58,7 @@ class Users {
         return res.status(200).json(data);
       }
     } catch (error) {
-      console.log(`Error on unbanning user ${req.params.id}: `, error);
+      console.log(`Error on unbanning user ${req.params.userId}: `, error);
       return res.status(500).json({
         status: "error",
         error: error.message,
@@ -118,7 +118,7 @@ class Users {
         return res.status(200).json(data);
       }
     } catch (error) {
-      console.log(`Error on getting user with id ${req.params.id} : `, error);
+      console.log(`Error on getting user with id ${req.params.userId} : `, error);
       return res.status(500).json({
         status: "error",
         error: error.message,
@@ -139,7 +139,7 @@ class Users {
         return res.status(200).json(data);
       }
     } catch (error) {
-      console.log(`Error on updating user with id : ${req.params.id}`, error);
+      console.log(`Error on updating user with id : ${req.params.userId}`, error);
       return res.status(500).json({
         status: "error",
         error: error.message,
@@ -160,7 +160,7 @@ class Users {
         return res.status(200).json(data);
       }
     } catch (error) {
-      console.log(`Error on updating user with id : ${req.params.id}`, error);
+      console.log(`Error on deleting user with id : ${req.params.userId}`, error);
       return res.status(500).json({
         status: "error",
         error: error.message,

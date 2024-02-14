@@ -7,6 +7,7 @@ import payments from './payment.route'
 import tokens from './token.route'
 import draws from './draw.route'
 import players from './player.route'
+import notifications from './notification.route'
 
 const routes = express()
 
@@ -18,5 +19,6 @@ routes.use('/api/v1/payments', payments)
 routes.use('/api/v1/tokens', tokens)
 routes.use('/api/v1/draws', draws)
 routes.use('/api/v1/players', players)
+routes.use('/api/v1/notifications', notifications)
 
 export default routes

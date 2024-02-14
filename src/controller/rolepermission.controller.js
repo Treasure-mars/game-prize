@@ -24,7 +24,7 @@ class RolePermission {
         });
       }
     } catch (error) {
-      console.log("Error on registering altering permission: ", error);
+      console.log(`Error on registering adding permission for role with id : ${req.params.roleId}`, error);
       return res.status(500).json({
         status: "error",
         error: error.message,
@@ -43,7 +43,7 @@ class RolePermission {
         return res.status(200).json(data)
       }
     } catch (error) {
-      console.log("Error on deleting all role's permissions in: ", error);
+      console.log(`Error on deleting all role's permissions for role with id : ${req.params.roleId}`, error);
       return res.status(500).json({
         status: "error",
         error: error.message
@@ -53,7 +53,8 @@ class RolePermission {
 
   static async getAllRolePermissions(req,res){
     try {
-      const { data, message } = await rolePermissions.getAllRolePermissions(req.params)
+      const { page, pageSize } = req.query;
+      const { data, message } = await rolePermissions.getAllRolePermissions(req.params, page, pageSize)
       if(message){
         return res.status(404).json({message})
       }
@@ -62,16 +63,16 @@ class RolePermission {
         return res.status(200).json(data)
       }
     } catch (error) {
-      console.log("Error on getting all user's permissions in: ", error);
+      console.log(`Error on getting all role's permissions for role with id : ${req.params.roleId}`, error);
       return res.status(500).json({
         status: "error",
         error: error.message
       });
     }
   }
-  static async getRolePermissions(req,res){
+  static async getRolePermission(req,res){
     try{
-      const {data, message} = await rolePermissions.getRolePermissions(req.params)
+      const {data, message} = await rolePermissions.getRolePermission(req.params)
       if(message){
         return res.status(404).json({
           message
@@ -82,7 +83,7 @@ class RolePermission {
         return res.status(200).json(data);
       }
     } catch (error) {
-      console.log("Error on getting role permission: ", error);
+      console.log(`Error on getting permission ${req.params.permissionId} for role with id : ${req.params.roleId}`, error);
       return res.status(500).json({
         status: "error",
         error: error.message,

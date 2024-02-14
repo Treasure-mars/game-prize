@@ -21,7 +21,6 @@ class permissions {
 
   static async register(data) {
     const { name, description } = data
-    console.log(data)
     if (name) {
       const permissionRole = await Permission.findOne({
         where: {
@@ -40,8 +39,12 @@ class permissions {
       return { data: permissionCreated }
   }
  
-  static async getAllPermissions(){
-    const allPermissions = await Permission.findAll()
+  static async getAllPermissions(page, pageSize){
+    const offset = (page - 1) * pageSize
+    const allPermissions = await Permission.findAll({
+      limit: pageSize,
+      offset: offset
+    })
     if (allPermissions.length === 0) {
       return { message: 'No permissions found' }
     }
@@ -49,12 +52,12 @@ class permissions {
   }
 
   static async deletePermission(data){
-    const { id } = data
+    const { permissionId } = data
 
-    if (id) {
+    if (permissionId) {
       const permission = await Permission.destroy({
         where: {
-          permissionId: id
+          permissionId
         }
       })
       if(permission !== 1){
@@ -62,7 +65,7 @@ class permissions {
       }
     }
     return { data: {
-        permissionId: id,
+        permissionId: permissionId,
       message: 'Permission deleted successfully'
     }}
   }
@@ -75,13 +78,13 @@ class permissions {
   }
 
   static async updatePermission(params, body){
-    const { id } = params
+    const { permissionId } = params
     const { name, description } = body
 
-    if (id) {
+    if (permissionId) {
       const permissionRole = await Permission.findOne({
         where: {
-          permissionId: id
+          permissionId
         }
       })
       if (!permissionRole) {
@@ -96,16 +99,16 @@ class permissions {
       permissionRole.save()
     }
     return { data: {
-      permissionId: id,
+      permissionId: permissionId,
       message: 'Permission updated successfully'
     }}
   }
 
   static async getPermission(data){
-    const { id } = data
+    const { permissionId } = data
     const permission = await Permission.findOne({
       where: {
-        permissionId: id
+        permissionId
       }
     })
     if (!permission) {

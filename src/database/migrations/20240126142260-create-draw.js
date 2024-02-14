@@ -23,6 +23,11 @@ module.exports = {
             allowNull: false,
             defaultValue: false
           },
+          winnerFound: {
+            type: Sequelize.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
+          },
           createdAt: {
             type: Sequelize.DATE,
             allowNull: false,

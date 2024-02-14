@@ -145,25 +145,25 @@ class Players {
     }
   }
   
-  static async playForProduct(param, body) {
+  static async playForProduct(param, user) {
     try {
         const { productId } = param
-        const { phoneNumber, playAmount } = body
-        const userFound = await users.findOne({
-          where: {
-            phoneNumber
-          }
-        })
-        if(!userFound){
-          userFound = await Player.findOne({
-            where: {
-              phoneNumber
-            }
-          })
-          if(!userFound){
-            return { message: 'User not found' };
-          }
-        }
+        const { userId } = user
+        // const userFound = await users.findOne({
+        //   where: {
+        //     phoneNumber
+        //   }
+        // })
+        // if(!userFound){
+        //   userFound = await Player.findOne({
+        //     where: {
+        //       phoneNumber
+        //     }
+        //   })
+        //   if(!userFound){
+        //     return { message: 'User not found' };
+        //   }
+        // }
         const productFound = await Product.findOne({
           where: {
             productId
@@ -174,9 +174,9 @@ class Players {
             return { message: 'Product not found' };
         }
 
-        if(playAmount !== productFound.playAmount) {
-            return { message: `Play amount should be exactly ${productFound.playAmount} RWF` };
-        }
+        // if(playAmount !== productFound.playAmount) {
+        //     return { message: `Play amount should be exactly ${productFound.playAmount} RWF` };
+        // }
 
         const now = Date.now()
 
@@ -195,7 +195,7 @@ class Players {
         
         return { 
           data: {
-            userId: userFound.userId, productId: productFound.productId, drawId: drawFound.drawId
+            userId: userId, productId: productFound.productId, drawId: drawFound.drawId
           }};
     } catch (error) {
         console.log('Error on playing for the product: ', error);
@@ -205,20 +205,31 @@ class Players {
 
   static async pickWinner(param) {
     try {
-        const { productId } = param
+        const { productId, drawId } = param
         
         const now = Date.now()
 
         const drawFound = await Draw.findOne({
           where: {
               productId,
-              // endDate: { [Op.eq]: now },
-              isPlayed: true
+              drawId
           }
         });
 
         if(!drawFound){
-          return { message: "No draws for this product yet" }
+          return { message: "Draw not found" }
+        }
+
+        if(!drawFound.isPlayed){
+          return { message: "Draw has not been played yet" }
+        }
+
+        // if(drawFound.endDate > now){
+        //   return { message: `Draw is planned on ${drawFound.endDate}` }
+        // }
+
+        if(drawFound.winnerFound){
+          return { message: "Draw has already been won" }
         }
 
         const tokenFound = await Token.findAll({
@@ -245,6 +256,30 @@ class Players {
   }
 
   static async confirmWinner(params){
+    const { tokenId } = params
+    const identifiedToken = await Token.findOne({
+      where:{
+        tokenId
+      }
+    })
+    if(!identifiedToken){
+      return { message: "Token not available" }
+    }
+    const identifiedDraw = await Draw.findOne({
+      where:{
+        drawId: identifiedToken.drawId
+      }
+    })
+    if(!identifiedDraw){
+      return { message: "Draw not found" }
+    }
+    identifiedDraw.winnerFound = true
+    identifiedDraw.save()
+
+    return {data: identifiedDraw}
+  }
+  
+  static async viewWinner(params){
     const { tokenId } = params
     const identifiedToken = await Token.findOne({
       where:{

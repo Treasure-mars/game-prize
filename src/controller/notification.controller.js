@@ -1,34 +1,34 @@
-import Products from "../services/product.services";
+import Notifications from "../services/notification.services";
 
 const { SMS_TOPIC } = process.env;
-class Product {
+class Notification {
   static async register(req, res) {
     try {
-      const { data, message } = await Products.register(req.body);
+      const { data, message } = await Notifications.register(req.body);
       if (message) {
         return res.status(400).json({
           status: "fail",
           message,
         });
       }
-      const { productId, productName } = data;
-      if (productId) {
+      const { notificationId, productName } = data;
+      if (notificationId) {
         return res.status(200).json({
           status: "success",
-          message: `Product ${productName} created with id ${productId}`,
+          message: `Notification ${productName} created with id ${notificationId}`,
         });
       }
     } catch (error) {
-      console.log("Error on registering product: ", error);
+      console.log("Error on registering notification: ", error);
       return res.status(500).json({
         status: "error",
         error: error.message,
       });
     }
   }
-  static async updateProduct(req,res){
+  static async updateNotification(req,res){
     try {
-      const {data, message} = await Products.updateProduct(req.params, req.body)
+      const {data, message} = await Notifications.updateNotification(req.params, req.body)
       if(message){
         return res.status(404).json({message})
       }
@@ -36,16 +36,16 @@ class Product {
         return res.status(200).json({data})
       }
     } catch (error) {
-      console.log(`Error on updating product with id : ${req.params.productId}`, error);
+      console.log(`Error on updating notification with id : ${req.params.notificationId}`, error);
       return res.status(500).json({
         status: "error",
         error: error.message
       });
     }
   }
-  static async getProduct(req,res){
+  static async getNotification(req,res){
     try {
-      const {data, message} = await Products.getProduct(req.params)
+      const {data, message} = await Notifications.getNotification(req.params)
       if(message){
         return res.status(404).json({message})
       }
@@ -53,16 +53,16 @@ class Product {
         return res.status(200).json({data})
       }
     } catch (error) {
-      console.log(`Error on getting product with id : ${req.params.productId}`, error);
+      console.log(`Error on getting notification with id : ${req.params.notificationId}`, error);
       return res.status(500).json({
         status: "error",
         error: error.message
       });
     }
   }
-  static async deleteProduct(req,res){
+  static async deleteNotification(req,res){
     try {
-      const {data, message} = await Products.deleteProduct(req.params)
+      const {data, message} = await Notifications.deleteNotification(req.params)
       if(message){
         return res.status(404).json({message})
       }
@@ -70,16 +70,16 @@ class Product {
         return res.status(200).json({data})
       }
     } catch (error) {
-      console.log(`Error on deleting product with id : ${req.params.productId}`, error);
+      console.log(`Error on deleting notification with id : ${req.params.notificationId}`, error);
       return res.status(500).json({
         status: "error",
         error: error.message
       });
     }
   }
-  static async getAllProducts(req,res){
+  static async getAllNotifications(req,res){
     try {
-      const {data, message} = await Products.getAllProducts()
+      const {data, message} = await Notifications.getAllNotifications()
       if(message){
         return res.status(404).json({message})
       }
@@ -87,7 +87,7 @@ class Product {
         return res.status(200).json({data})
       }
     } catch (error) {
-      console.log("Error on getting all products in: ", error);
+      console.log("Error on getting all notifications in: ", error);
       return res.status(500).json({
         status: "error",
         error: error.message
@@ -95,4 +95,4 @@ class Product {
     }
   }
 }
-export default Product;
+export default Notification;

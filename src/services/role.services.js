@@ -40,8 +40,12 @@ class Roles {
       return { data: roleCreated }
   }
  
-  static async getAllRoles(){
-    const allRoles = await Role.findAll()
+  static async getAllRoles(page, pageSize){
+    const offset = (page - 1) * pageSize
+    const allRoles = await Role.findAll({
+      limit: pageSize,
+      offset: offset
+    })
     if (allRoles.length === 0) {
       return { message: 'No users found' }
     }
@@ -49,12 +53,12 @@ class Roles {
   }
 
   static async deleteRole(data){
-    const { id } = data
+    const { roleId } = data
 
-    if (id) {
+    if (roleId) {
       const role = await Role.destroy({
         where: {
-          roleId: id
+          roleId
         }
       })
       if(role !== 1){
@@ -62,7 +66,7 @@ class Roles {
       }
     }
     return { data: {
-      roleId: id,
+      roleId: roleId,
       message: 'Role deleted successfully'
     }}
   }
@@ -75,13 +79,13 @@ class Roles {
   }
 
   static async updateRole(params, body){
-    const { id } = params
+    const { roleId } = params
     const { name, description } = body
 
-    if (id) {
+    if (roleId) {
       const roleUser = await Role.findOne({
         where: {
-          roleId: id
+          roleId
         }
       })
       if (!roleUser) {
@@ -96,16 +100,16 @@ class Roles {
       roleUser.save()
     }
     return { data: {
-      roleId: id,
+      roleId: roleId,
       message: 'Role updated successfully'
     }}
   }
 
   static async getRole(data){
-    const { id } = data
+    const { roleId } = data
     const role = await Role.findOne({
       where: {
-        roleId: id
+        roleId
       }
     })
     if (!role) {

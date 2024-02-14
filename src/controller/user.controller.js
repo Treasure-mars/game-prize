@@ -11,7 +11,7 @@ class Users {
           message,
         });
       }
-      const { phoneNumber, userId } = data;
+      const { phoneNumber } = data;
       if (phoneNumber) {
         const otpCode = await User.otProcess(phoneNumber);
         
@@ -63,7 +63,7 @@ class Users {
         return res.status(200).json(data);
       }
     } catch (error) {
-      console.log("Error on logging in: ", error);
+      console.log("Error on verifying otp in: ", error);
       return res.status(500).json({
         status: "error",
         error: error.message,
@@ -82,7 +82,7 @@ class Users {
         return res.status(200).json(data)
       }
     } catch (error) {
-      console.log("Error on logging in: ", error);
+      console.log("Error on changing password in: ", error);
       return res.status(500).json({
         status: "error",
         error: error.message
@@ -120,7 +120,7 @@ class Users {
         });
       }
     } catch (error) {
-      console.log("Error on recovering account: ", error);
+      console.log("Error on resending otp : ", error);
       return res.status(500).json({
         status: "error",
         error: error.message,
@@ -138,19 +138,19 @@ class Users {
         return res.status(200).json(data)
       }
     } catch (error) {
-      console.log("Error on logging in: ", error);
+      console.log("Error on resetting password in: ", error);
       return res.status(500).json({
         status: "error",
         error: error.message
       });
     }
   }
-  static async profile(req,res){
+  static async getProfile(req,res){
     try {
       // Access user information from the decoded token
       const identifier = req.user.identifier;
 
-      const {data, message} = await User.profile(identifier)
+      const {data, message} = await User.getProfile(identifier)
       if(message){
         return res.status(404).json({message})
       }
@@ -158,16 +158,16 @@ class Users {
         return res.status(200).json({data})
       }
     } catch (error) {
-      console.log("Error on logging in: ", error);
+      console.log("Error on getting user profile in: ", error);
       return res.status(500).json({
         status: "error",
         error: error.message
       });
     }
   }
-  static async profiles(req,res){
+  static async updateProfile(req,res){
     try {
-      const {data, message} = await User.profiles(req)
+      const {data, message} = await User.updateProfile(req)
       if(message){
         return res.status(404).json({message})
       }
@@ -175,7 +175,7 @@ class Users {
         return res.status(200).json({data})
       }
     } catch (error) {
-      console.log("Error on logging in: ", error);
+      console.log("Error on updating profile in: ", error);
       return res.status(500).json({
         status: "error",
         error: error.message
@@ -192,7 +192,7 @@ class Users {
         return res.status(200).json({data})
       }
     } catch (error) {
-      console.log("Error on logging in: ", error);
+      console.log("Error on logging out: ", error);
       return res.status(500).json({
         status: "error",
         error: error.message

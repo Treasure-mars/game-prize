@@ -29,7 +29,7 @@ class Draw {
         return res.status(200).json({data})
       }
     } catch (error) {
-      console.log("Error on updating product in: ", error);
+      console.log(`Error on updating draw with id : ${req.params.drawId}`, error);
       return res.status(500).json({
         status: "error",
         error: error.message
@@ -46,7 +46,7 @@ class Draw {
         return res.status(200).json({data})
       }
     } catch (error) {
-      console.log("Error on getting product in: ", error);
+      console.log(`Error on getting draw with id : ${req.params.drawId}`, error);
       return res.status(500).json({
         status: "error",
         error: error.message
@@ -63,7 +63,7 @@ class Draw {
         return res.status(200).json({data})
       }
     } catch (error) {
-      console.log("Error on deleting product in: ", error);
+      console.log(`Error on deleting draw with id : ${req.params.drawId}`, error);
       return res.status(500).json({
         status: "error",
         error: error.message
@@ -80,7 +80,7 @@ class Draw {
         return res.status(200).json({data})
       }
     } catch (error) {
-      console.log("Error on getting all products in: ", error);
+      console.log("Error on getting all draws in: ", error);
       return res.status(500).json({
         status: "error",
         error: error.message
@@ -97,7 +97,7 @@ class Draw {
         return res.status(200).json({data})
       }
     } catch (error) {
-      console.log("Error on getting product in: ", error);
+      console.log(`Error on getting draws for product with id : ${req.params.productId}`, error);
       return res.status(500).json({
         status: "error",
         error: error.message

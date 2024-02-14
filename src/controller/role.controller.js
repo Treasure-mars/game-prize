@@ -29,7 +29,8 @@ class Role {
 
   static async getAllRoles(req,res){
     try {
-      const { data, message } = await Roles.getAllRoles()
+      const { page, pageSize } = req.query;
+      const { data, message } = await Roles.getAllRoles(page, pageSize)
       if(message){
         return res.status(404).json({message})
       }
@@ -78,7 +79,7 @@ class Role {
         return res.status(200).json(data);
       }
     } catch (error) {
-      console.log("Error on getting user role: ", error);
+      console.log(`Error on getting role with id : ${req.params.roleId}`, error);
       return res.status(500).json({
         status: "error",
         error: error.message,
@@ -99,7 +100,7 @@ class Role {
         return res.status(200).json(data);
       }
     } catch (error) {
-      console.log("Error on updating user role: ", error);
+      console.log(`Error on updating role with id : ${req.params.roleId}`, error);
       return res.status(500).json({
         status: "error",
         error: error.message,
@@ -120,7 +121,7 @@ class Role {
         return res.status(200).json(data);
       }
     } catch (error) {
-      console.log("Error on deleting user role: ", error);
+      console.log(`Error on deleting role with id : ${req.params.roleId}`, error);
       return res.status(500).json({
         status: "error",
         error: error.message,

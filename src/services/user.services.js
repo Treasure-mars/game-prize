@@ -111,6 +111,7 @@ class User {
       }
 
       data.userRole = identifierUser.roleId
+      data.userId = identifierUser.userId
       identifierUser.isLoggedIn = true
       identifierUser.save()
     }
@@ -190,7 +191,7 @@ class User {
     return { data: {msg: 'Password updated successfully'} }
   }
 
-  static async profile(identifier){
+  static async getProfile(identifier){
     const identifierUser = await users.findOne({
       where:{
         [Op.or]: [{email: identifier},
@@ -204,7 +205,7 @@ class User {
     return {data:identifierUser}
   }
 
-  static async profiles(data){
+  static async updateProfile(data){
     const { firstName, lastName, email } = data.body
     const { identifier } = data.user
     const identifierUser = await users.findOne({

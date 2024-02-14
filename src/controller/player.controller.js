@@ -38,7 +38,7 @@ class Player {
         return res.status(200).json({data})
       }
     } catch (error) {
-      console.log("Error on updating player in: ", error);
+      console.log(`Error on updating player with id : ${req.params.playerId}`, error);
       return res.status(500).json({
         status: "error",
         error: error.message
@@ -55,7 +55,7 @@ class Player {
         return res.status(200).json({data})
       }
     } catch (error) {
-      console.log("Error on getting player in: ", error);
+      console.log(`Error on getting player with id : ${req.params.playerId}`, error);
       return res.status(500).json({
         status: "error",
         error: error.message
@@ -72,7 +72,7 @@ class Player {
         return res.status(200).json({data})
       }
     } catch (error) {
-      console.log("Error on deleting player in: ", error);
+      console.log(`Error on deleting player with id : ${req.params.playerId}`, error);
       return res.status(500).json({
         status: "error",
         error: error.message
@@ -117,7 +117,7 @@ class Player {
 
   static async playForProduct(req, res, next) {
     try {
-      const {data, message} = await Players.playForProduct(req.params, req.body)
+      const {data, message} = await Players.playForProduct(req.params, req.user)
       if(message){
         return res.status(404).json({message})
       }
@@ -128,7 +128,7 @@ class Player {
         next()
       }
     } catch (error) {
-      console.log("Error on getting all products in: ", error);
+      console.log(`Error on playing for product with id : ${req.params.productId}`, error);
       return res.status(500).json({
         status: "error",
         error: error.message
@@ -146,7 +146,25 @@ class Player {
         return res.status(200).json({data})
       }
     } catch (error) {
-      console.log("Error on getting all products in: ", error);
+      console.log(`Error on picking a winner for draw with id : ${req.params.drawId}`, error);
+      return res.status(500).json({
+        status: "error",
+        error: error.message
+      });
+    }
+  }
+
+  static async viewWinner(req,res){
+    try {
+      const {data, message} = await Players.viewWinner(req.params)
+      if(message){
+        return res.status(404).json({message})
+      }
+      if(data){
+        return res.status(200).json({data})
+      }
+    } catch (error) {
+      console.log(`Error on viewing a winner for token with id : ${req.params.tokenId}`, error);
       return res.status(500).json({
         status: "error",
         error: error.message
@@ -164,7 +182,7 @@ class Player {
         return res.status(200).json({data})
       }
     } catch (error) {
-      console.log("Error on getting player in: ", error);
+      console.log(`Error on confirming a winner for token with id : ${req.params.tokenId}`, error);
       return res.status(500).json({
         status: "error",
         error: error.message

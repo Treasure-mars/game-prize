@@ -90,7 +90,7 @@ class User {
     if (phoneNumber) {
       const identifierUser = await users.findOne({
         where: {
-            phoneNumber: phoneNumber
+            phoneNumber
         }
       })
       if (!identifierUser) {
@@ -113,12 +113,12 @@ class User {
   }
 
   static async banUserDel(data){
-    const { id } = data
+    const { userId } = data
 
-    if (id) {
+    if (userId) {
       const user = await BannedUsers.destroy({
         where: {
-          userId: id
+          userId
         }
       })
       if(user !== 1){
@@ -126,15 +126,19 @@ class User {
       }
     }
     return { data: {
-      userId: id,
+      userId: userId,
       message: 'Account have been unbanned successfully'
     }}
   }
   
   static async getBannedUser(page, pageSize){
+    const offset = (page - 1) * pageSize
+
     const allUsersBanned = await BannedUsers.findAll({
       limit: pageSize,
+      offset: offset
     });
+
     if (allUsersBanned.length === 0) {
       return { message: 'No banned users' }
     }
@@ -142,8 +146,10 @@ class User {
   }
 
   static async getAllUsers(page, pageSize){
+    const offset = (page - 1) * pageSize
     const allUsers = await users.findAll({
-      limit: pageSize
+      limit: pageSize,
+      offset: offset
     });
     if (allUsers.length === 0) {
       return { message: 'No users found' }
@@ -152,12 +158,12 @@ class User {
   }
 
   static async deleteUser(data){
-    const { id } = data
+    const { userId } = data
 
-    if (id) {
+    if (userId) {
       const user = await users.destroy({
         where: {
-          userId: id
+          userId
         }
       })
       if(user !== 1){
@@ -165,19 +171,19 @@ class User {
       }
     }
     return { data: {
-      userId: id,
+      userId: userId,
       message: 'User deleted successfully'
     }}
   }
 
   static async updateUser(params, body){
-    const { id } = params
+    const { userId } = params
     const { firstName, lastName, email } = body
 
-    if (id) {
+    if (userId) {
       const identifierUser = await users.findOne({
         where: {
-          userId: id
+          userId
         }
       })
       if(!identifierUser){
@@ -195,16 +201,16 @@ class User {
       identifierUser.save()
     }
     return { data: {
-      userId: id,
+      userId: userId,
       message: 'User updated successfully'
     }}
   }
 
   static async getUser(data){
-    const { id } = data
+    const { userId } = data
     const user = await users.findOne({
       where: {
-        userId: id
+        userId
       }
     })
     if (!user) {

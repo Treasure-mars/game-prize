@@ -741,14 +741,14 @@
       "500":
         description: Internal Server Error
 
-/api/v1/users/banned/{id}:
+/api/v1/users/banned/{userId}:
   delete:
     tags:
       - Admin
     summary: delete a banned user by id
     description: delete a banned user by id
     parameters:
-      - name: id
+      - name: userId
         in: path
         description: id of the user to remove from banned users
         type: string
@@ -947,7 +947,6 @@
         description: UnAauthorized
       "500":
         description: Internal Server Error
-/api/v1/users/profiles:
   patch:
     tags:
       - Users
@@ -984,14 +983,14 @@
         description: UnAauthorized
       "500":
         description: Internal Server Error
-/api/v1/users/{id}:
+/api/v1/users/{userId}:
   get:
     tags:
       - Admin
     summary: getting a user by id
     description: getting a user by id
     parameters:
-      - name: id
+      - name: userId
         in: path
         description: id of the user to retrieve
         type: string
@@ -1017,7 +1016,7 @@
     summary: update a user by id
     description: update a user by id
     parameters:
-      - name: id
+      - name: userId
         in: path
         description: id of the user to update
         type: string
@@ -1063,7 +1062,7 @@
     summary: delete a user by id
     description: delete a user by id
     parameters:
-      - name: id
+      - name: userId
         in: path
         description: id of the user to delete
         type: string
@@ -1145,14 +1144,14 @@
         description: UnAauthorized
       "500":
         description: Internal Server Error
-/api/v1/products/{id}:
+/api/v1/products/{productId}:
   get:
     tags:
       - Products
     summary: Get a product by id
     description: Get a product by id
     parameters:
-      - name: id
+      - name: productId
         in: path
         required: true
 
@@ -1175,7 +1174,7 @@
     summary: Delete a product by id
     description: Delete a product by id
     parameters:
-      - name: id
+      - name: productId
         in: path
         required: true
     
@@ -1198,7 +1197,7 @@
     summary: Update a product
     description: Update a product
     parameters:
-      - name: id
+      - name: productId
         in: path
         required: true
     requestBody:
@@ -1294,14 +1293,14 @@
         description: UnAauthorized
       "500":
         description: Internal Server Error
-/api/v1/payments/{id}:
+/api/v1/payments/{paymentId}:
   get:
     tags:
       - Payments
     summary: Get a payment by id
     description: Get a payment by id
     parameters:
-      - name: id
+      - name: paymentId
         in: path
         required: true
 
@@ -1324,7 +1323,7 @@
     summary: Delete a payment by id
     description: Delete a payment by id
     parameters:
-      - name: id
+      - name: paymentId
         in: path
         required: true
     
@@ -1347,7 +1346,7 @@
     summary: Update a payment
     description: Update a payment
     parameters:
-      - name: id
+      - name: paymentId
         in: path
         required: true
     requestBody:
@@ -1434,14 +1433,14 @@
         description: UnAauthorized
       "500":
         description: Internal Server Error
-/api/v1/tokens/{id}:
+/api/v1/tokens/{tokenId}:
   get:
     tags:
       - Tokens
     summary: Get a token by id
     description: Get a token by id
     parameters:
-      - name: id
+      - name: tokenId
         in: path
         required: true
 
@@ -1464,7 +1463,7 @@
     summary: Delete a token by id
     description: Delete a token by id
     parameters:
-      - name: id
+      - name: tokenId
         in: path
         required: true
     
@@ -1487,7 +1486,7 @@
     summary: Update a token
     description: Update a token
     parameters:
-      - name: id
+      - name: tokenId
         in: path
         required: true
     requestBody:
@@ -1571,14 +1570,14 @@
         description: UnAauthorized
       "500":
         description: Internal Server Error
-/api/v1/draws/{id}:
+/api/v1/draws/{drawId}:
   get:
     tags:
       - Draws
     summary: Get a draw by id
     description: Get a draw by id
     parameters:
-      - name: id
+      - name: drawId
         in: path
         required: true
 
@@ -1601,7 +1600,7 @@
     summary: Delete a draw by id
     description: Delete a draw by id
     parameters:
-      - name: id
+      - name: drawId
         in: path
         required: true
     
@@ -1624,7 +1623,7 @@
     summary: Update a draw
     description: Update a draw
     parameters:
-      - name: id
+      - name: drawId
         in: path
         required: true
     requestBody:
@@ -1670,14 +1669,14 @@
         description: UnAauthorized
       "500":
         description: Internal Server Error
-/api/v1/draws/product/{id}:
+/api/v1/draws/product/{productId}:
   get:
     tags:
       - Draws
     summary: Get all draws for a product by id
     description: Get all draws for a product by id
     parameters:
-      - name: id
+      - name: productId
         in: path
         required: true
 
@@ -1694,152 +1693,152 @@
         description: UnAauthorized
       "500":
         description: Internal Server Error
-/api/v1/players/register:
-  post:
-    tags:
-      - Players
-    summary: Add a player
-    description: Add a player
-    requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              firstName:
-                type: string
-                example: Nambaje
-              lastName:
-                type: string
-                example: Edwin
-              email:
-                type: string
-                example: nambajedwin@gmail.com
-              phoneNumber:
-                type: string
-                example: "250787441511"
-    security:
-      - {}
-      - bearerAuth: []
+# /api/v1/players/register:
+#   post:
+#     tags:
+#       - Players
+#     summary: Add a player
+#     description: Add a player
+#     requestBody:
+#       required: true
+#       content:
+#         application/json:
+#           schema:
+#             type: object
+#             properties:
+#               firstName:
+#                 type: string
+#                 example: Nambaje
+#               lastName:
+#                 type: string
+#                 example: Edwin
+#               email:
+#                 type: string
+#                 example: nambajedwin@gmail.com
+#               phoneNumber:
+#                 type: string
+#                 example: "250787441511"
+#     security:
+#       - {}
+#       - bearerAuth: []
 
-    responses:
-      "200":
-        description: Successful operation
-      "400":
-        description: Bad Request
-      "401":
-        description: UnAauthorized
-      "500":
-        description: Internal Server Error
-/api/v1/players/{id}:
-  get:
-    tags:
-      - Players
-    summary: Get a player by id
-    description: Get a player by id
-    parameters:
-      - name: id
-        in: path
-        required: true
+#     responses:
+#       "200":
+#         description: Successful operation
+#       "400":
+#         description: Bad Request
+#       "401":
+#         description: UnAauthorized
+#       "500":
+#         description: Internal Server Error
+# /api/v1/players/{playerId}:
+#   get:
+#     tags:
+#       - Players
+#     summary: Get a player by id
+#     description: Get a player by id
+#     parameters:
+#       - name: playerId
+#         in: path
+#         required: true
 
-    security:
-      - {}
-      - bearerAuth: []
+#     security:
+#       - {}
+#       - bearerAuth: []
 
-    responses:
-      "200":
-        description: Successful operation
-      "400":
-        description: Bad Request
-      "401":
-        description: UnAauthorized
-      "500":
-        description: Internal Server Error
-  delete:
-    tags:
-      - Players
-    summary: Delete a player by id
-    description: Delete a player by id
-    parameters:
-      - name: id
-        in: path
-        required: true
+#     responses:
+#       "200":
+#         description: Successful operation
+#       "400":
+#         description: Bad Request
+#       "401":
+#         description: UnAauthorized
+#       "500":
+#         description: Internal Server Error
+#   delete:
+#     tags:
+#       - Players
+#     summary: Delete a player by id
+#     description: Delete a player by id
+#     parameters:
+#       - name: playerId
+#         in: path
+#         required: true
     
-    security:
-      - {}
-      - bearerAuth: []
+#     security:
+#       - {}
+#       - bearerAuth: []
 
-    responses:
-      "200":
-        description: Successful operation
-      "400":
-        description: Bad Request
-      "401":
-        description: UnAauthorized
-      "500":
-        description: Internal Server Error
-  patch:
-    tags:
-      - Players
-    summary: Update a player
-    description: Update a player
-    parameters:
-      - name: id
-        in: path
-        required: true
-    requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              firstName:
-                type: string
-                example: Nambaje
-              lastName:
-                type: string
-                example: Edwin
-              email:
-                type: string
-                example: nambajedwin@gmail.com
-              phoneNumber:
-                type: string
-                example: "250787441511"
-    security:
-      - {}
-      - bearerAuth: []
+#     responses:
+#       "200":
+#         description: Successful operation
+#       "400":
+#         description: Bad Request
+#       "401":
+#         description: UnAauthorized
+#       "500":
+#         description: Internal Server Error
+#   patch:
+#     tags:
+#       - Players
+#     summary: Update a player
+#     description: Update a player
+#     parameters:
+#       - name: playerId
+#         in: path
+#         required: true
+#     requestBody:
+#       required: true
+#       content:
+#         application/json:
+#           schema:
+#             type: object
+#             properties:
+#               firstName:
+#                 type: string
+#                 example: Nambaje
+#               lastName:
+#                 type: string
+#                 example: Edwin
+#               email:
+#                 type: string
+#                 example: nambajedwin@gmail.com
+#               phoneNumber:
+#                 type: string
+#                 example: "250787441511"
+#     security:
+#       - {}
+#       - bearerAuth: []
 
-    responses:
-      "200":
-        description: Successful operation
-      "400":
-        description: Bad Request
-      "401":
-        description: UnAauthorized
-      "500":
-        description: Internal Server Error
-/api/v1/players/all:
-  get:
-    tags:
-      - Players
-    summary: Get all players
-    description: Get all players
+#     responses:
+#       "200":
+#         description: Successful operation
+#       "400":
+#         description: Bad Request
+#       "401":
+#         description: UnAauthorized
+#       "500":
+#         description: Internal Server Error
+# /api/v1/players/all:
+#   get:
+#     tags:
+#       - Players
+#     summary: Get all players
+#     description: Get all players
     
-    security:
-      - {}
-      - bearerAuth: []
+#     security:
+#       - {}
+#       - bearerAuth: []
 
-    responses:
-      "200":
-        description: Successful operation
-      "400":
-        description: Bad Request
-      "401":
-        description: UnAauthorized
-      "500":
-        description: Internal Server Error
+#     responses:
+#       "200":
+#         description: Successful operation
+#       "400":
+#         description: Bad Request
+#       "401":
+#         description: UnAauthorized
+#       "500":
+#         description: Internal Server Error
 /api/v1/players/getAllProduct:
   get:
     tags:
@@ -1847,6 +1846,10 @@
     summary: Get all products available to play for
     description: Get all products available to play for
 
+    security:
+      - {}
+      - bearerAuth: []
+      
     responses:
       "200":
         description: Successful operation
@@ -1857,30 +1860,20 @@
       "500":
         description: Internal Server Error
 
-/api/v1/players/playForProduct/{id}: 
+/api/v1/players/playForProduct/{productId}: 
   post:
     tags:
       - Players
     summary: Play for product by id
     description: Play for product by id
     parameters:
-      - name: id
+      - name: productId
         in: path
         required: true
 
-    requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              phoneNumber:
-                type: string
-                example: "250787441511"
-              playAmount:
-                type: number
-                example: 500
+    security:
+      - {}
+      - bearerAuth: []
 
     responses:
       "200":
@@ -1892,14 +1885,17 @@
       "500":
         description: Internal Server Error
 
-/api/v1/players/pickWinner/{id}: 
+/api/v1/players/pickWinner/{productId}/{drawId}: 
   post:
     tags:
       - Players
     summary: Pick a winner
     description: Pick a winner
     parameters:
-      - name: id
+      - name: productId
+        in: path
+        required: true
+      - name: drawId
         in: path
         required: true
 
@@ -1932,6 +1928,177 @@
       - {}
       - bearerAuth: []
       
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+
+/api/v1/players/viewWinner/{tokenId}: 
+  get:
+    tags:
+      - Players
+    summary: Confirm a winner
+    description: Confirm a winner
+    parameters:
+      - name: tokenId
+        in: path
+        required: true
+
+    security:
+      - {}
+      - bearerAuth: []
+      
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+/api/v1/notifications/register:
+  post:
+    tags:
+      - Notifications
+    summary: Add a notification
+    description: Add a notification
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              userId:
+                type: string
+                example: "4a4ac009-9b4b-4054-9f35-4b11928f0a3d"
+              message:
+                type: string
+                example: "Your account have been successfully created"
+              gatewayResponse:
+                type: string
+                example: "Your account have been successfully created"
+              status:
+                type: boolean
+                example: true
+    security:
+      - {}
+      - bearerAuth: []
+
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+/api/v1/notifications/{notificationId}:
+  get:
+    tags:
+      - Notifications
+    summary: Get a notification by id
+    description: Get a notification by id
+    parameters:
+      - name: notificationId
+        in: path
+        required: true
+
+    security:
+      - {}
+      - bearerAuth: []
+
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+  delete:
+    tags:
+      - Notifications
+    summary: Delete a notification by id
+    description: Delete a notification by id
+    parameters:
+      - name: notificationId
+        in: path
+        required: true
+    
+    security:
+      - {}
+      - bearerAuth: []
+
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+  patch:
+    tags:
+      - Notifications
+    summary: Update a notification
+    description: Update a notification
+    parameters:
+      - name: notificationId
+        in: path
+        required: true
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              userId:
+                type: string
+                example: "4a4ac009-9b4b-4054-9f35-4b11928f0a3d"
+              message:
+                type: string
+                example: "Your account have been successfully created"
+              gatewayResponse:
+                type: string
+                example: "Your account have been successfully created"
+              status:
+                type: boolean
+                example: true
+    security:
+      - {}
+      - bearerAuth: []
+
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+/api/v1/notifications/all:
+  get:
+    tags:
+      - Notifications
+    summary: Get all notifications
+    description: Get all notifications
+    
+    security:
+      - {}
+      - bearerAuth: []
+
     responses:
       "200":
         description: Successful operation
