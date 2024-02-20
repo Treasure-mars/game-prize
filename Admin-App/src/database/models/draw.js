@@ -38,10 +38,13 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         defaultValue: false
       },
+<<<<<<< HEAD:Admin-App/src/database/models/draw.js
       winnerCount: {
         type: DataTypes.INTEGER,
         allowNull: false
       },
+=======
+>>>>>>> 380ac2c4b321506e853d71d64c5bc8449ea5fb2f:src/database/models/draw.js
       winnerFound: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
