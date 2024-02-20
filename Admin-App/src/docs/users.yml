@@ -17,10 +17,6 @@
               password:
                 type: string
                 example: 12345
-<<<<<<< HEAD:Admin-App/src/docs/users.yml
-
-=======
->>>>>>> 380ac2c4b321506e853d71d64c5bc8449ea5fb2f:src/docs/users.yml
     responses:
       "200":
         description: Successful operation
@@ -670,37 +666,6 @@
 
 /api/v1/users/banned/{userId}:
   delete:
-<<<<<<< HEAD:Admin-App/src/docs/users.yml
-=======
-    tags:
-      - Admin
-    summary: delete a banned user by id
-    description: delete a banned user by id
-    parameters:
-      - name: userId
-        in: path
-        description: id of the user to remove from banned users
-        type: string
-    security:
-      - {}
-      - bearerAuth: []
-    responses:
-      "200":
-        description: Successful operation
-      "400":
-        description: Bad Request
-      "401":
-        description: UnAauthorized
-      "403":
-        description: Forbidden
-      "404":
-        description: Not Found
-      "500":
-        description: Internal Server Error
-
-/api/v1/users/verify-otp:
-  post:
->>>>>>> 380ac2c4b321506e853d71d64c5bc8449ea5fb2f:src/docs/users.yml
     tags:
       - Users
     summary: delete a banned user by id
@@ -952,12 +917,9 @@
               drawPeriod:
                 type: number
                 example: 3
-<<<<<<< HEAD:Admin-App/src/docs/users.yml
               winnerCount:
                 type: number
                 example: 1
-=======
->>>>>>> 380ac2c4b321506e853d71d64c5bc8449ea5fb2f:src/docs/users.yml
               playAmount:
                 type: number
                 example: 500
@@ -1088,45 +1050,6 @@
         description: UnAauthorized
       "500":
         description: Internal Server Error
-<<<<<<< HEAD:Admin-App/src/docs/users.yml
-
-=======
-/api/v1/payments/register:
-  post:
-    tags:
-      - Payments
-    summary: Add a payment
-    description: Add a payment
-    requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              productId:
-                type: string
-                example: "c14c4d19-5ff4-41ec-8bff-b97e70035731"
-              userId:
-                type: string
-                example: "9f1a8ba9-54e3-4526-813f-bee9c4b1debb"
-              paymentAmount:
-                type: number
-                example: 500
-    security:
-      - {}
-      - bearerAuth: []
-
-    responses:
-      "200":
-        description: Successful operation
-      "400":
-        description: Bad Request
-      "401":
-        description: UnAauthorized
-      "500":
-        description: Internal Server Error
->>>>>>> 380ac2c4b321506e853d71d64c5bc8449ea5fb2f:src/docs/users.yml
 /api/v1/payments/{paymentId}:
   get:
     tags:
@@ -1212,10 +1135,6 @@
         description: UnAauthorized
       "500":
         description: Internal Server Error
-<<<<<<< HEAD:Admin-App/src/docs/users.yml
-
-=======
->>>>>>> 380ac2c4b321506e853d71d64c5bc8449ea5fb2f:src/docs/users.yml
 /api/v1/payments/all:
   get:
     tags:
@@ -1236,45 +1155,6 @@
         description: UnAauthorized
       "500":
         description: Internal Server Error
-<<<<<<< HEAD:Admin-App/src/docs/users.yml
-
-=======
-/api/v1/tokens/register:
-  post:
-    tags:
-      - Tokens
-    summary: Add a token
-    description: Add a token
-    requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              userId:
-                type: string
-                example: "9f1a8ba9-54e3-4526-813f-bee9c4b1debb"
-              productId:
-                type: string
-                example: "c14c4d19-5ff4-41ec-8bff-b97e70035731"
-              drawId:
-                type: string
-                example: "9f1a8ba9-54e3-4526-813f-bee9c4b1debb"
-    security:
-      - {}
-      - bearerAuth: []
-
-    responses:
-      "200":
-        description: Successful operation
-      "400":
-        description: Bad Request
-      "401":
-        description: UnAauthorized
-      "500":
-        description: Internal Server Error
->>>>>>> 380ac2c4b321506e853d71d64c5bc8449ea5fb2f:src/docs/users.yml
 /api/v1/tokens/{tokenId}:
   get:
     tags:
@@ -1360,10 +1240,6 @@
         description: UnAauthorized
       "500":
         description: Internal Server Error
-<<<<<<< HEAD:Admin-App/src/docs/users.yml
-
-=======
->>>>>>> 380ac2c4b321506e853d71d64c5bc8449ea5fb2f:src/docs/users.yml
 /api/v1/tokens/all:
   get:
     tags:
@@ -1384,472 +1260,6 @@
         description: UnAauthorized
       "500":
         description: Internal Server Error
-<<<<<<< HEAD:Admin-App/src/docs/users.yml
-
-=======
-/api/v1/draws/register:
-  post:
-    tags:
-      - Draws
-    summary: Add a draw
-    description: Add a draw
-    requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              productId:
-                type: string
-                example: "c14c4d19-5ff4-41ec-8bff-b97e70035731"
-              drawsMax:
-                type: number
-                example: 5
-    security:
-      - {}
-      - bearerAuth: []
-
-    responses:
-      "200":
-        description: Successful operation
-      "400":
-        description: Bad Request
-      "401":
-        description: UnAauthorized
-      "500":
-        description: Internal Server Error
-/api/v1/draws/{drawId}:
-  get:
-    tags:
-      - Draws
-    summary: Get a draw by id
-    description: Get a draw by id
-    parameters:
-      - name: drawId
-        in: path
-        required: true
-
-    security:
-      - {}
-      - bearerAuth: []
-
-    responses:
-      "200":
-        description: Successful operation
-      "400":
-        description: Bad Request
-      "401":
-        description: UnAauthorized
-      "500":
-        description: Internal Server Error
-  delete:
-    tags:
-      - Draws
-    summary: Delete a draw by id
-    description: Delete a draw by id
-    parameters:
-      - name: drawId
-        in: path
-        required: true
-    
-    security:
-      - {}
-      - bearerAuth: []
-
-    responses:
-      "200":
-        description: Successful operation
-      "400":
-        description: Bad Request
-      "401":
-        description: UnAauthorized
-      "500":
-        description: Internal Server Error
-  patch:
-    tags:
-      - Draws
-    summary: Update a draw
-    description: Update a draw
-    parameters:
-      - name: drawId
-        in: path
-        required: true
-    requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              productId:
-                type: string
-                example: "c14c4d19-5ff4-41ec-8bff-b97e70035731"
-    security:
-      - {}
-      - bearerAuth: []
-
-    responses:
-      "200":
-        description: Successful operation
-      "400":
-        description: Bad Request
-      "401":
-        description: UnAauthorized
-      "500":
-        description: Internal Server Error
-/api/v1/draws/all:
-  get:
-    tags:
-      - Draws
-    summary: Get all draws
-    description: Get all draws
-    
-    security:
-      - {}
-      - bearerAuth: []
-
-    responses:
-      "200":
-        description: Successful operation
-      "400":
-        description: Bad Request
-      "401":
-        description: UnAauthorized
-      "500":
-        description: Internal Server Error
-/api/v1/draws/product/{productId}:
-  get:
-    tags:
-      - Draws
-    summary: Get all draws for a product by id
-    description: Get all draws for a product by id
-    parameters:
-      - name: productId
-        in: path
-        required: true
-
-    security:
-      - {}
-      - bearerAuth: []
-
-    responses:
-      "200":
-        description: Successful operation
-      "400":
-        description: Bad Request
-      "401":
-        description: UnAauthorized
-      "500":
-        description: Internal Server Error
-# /api/v1/players/register:
-#   post:
-#     tags:
-#       - Players
-#     summary: Add a player
-#     description: Add a player
-#     requestBody:
-#       required: true
-#       content:
-#         application/json:
-#           schema:
-#             type: object
-#             properties:
-#               firstName:
-#                 type: string
-#                 example: Nambaje
-#               lastName:
-#                 type: string
-#                 example: Edwin
-#               email:
-#                 type: string
-#                 example: nambajedwin@gmail.com
-#               phoneNumber:
-#                 type: string
-#                 example: "250787441511"
-#     security:
-#       - {}
-#       - bearerAuth: []
-
-#     responses:
-#       "200":
-#         description: Successful operation
-#       "400":
-#         description: Bad Request
-#       "401":
-#         description: UnAauthorized
-#       "500":
-#         description: Internal Server Error
-# /api/v1/players/{playerId}:
-#   get:
-#     tags:
-#       - Players
-#     summary: Get a player by id
-#     description: Get a player by id
-#     parameters:
-#       - name: playerId
-#         in: path
-#         required: true
-
-#     security:
-#       - {}
-#       - bearerAuth: []
-
-#     responses:
-#       "200":
-#         description: Successful operation
-#       "400":
-#         description: Bad Request
-#       "401":
-#         description: UnAauthorized
-#       "500":
-#         description: Internal Server Error
-#   delete:
-#     tags:
-#       - Players
-#     summary: Delete a player by id
-#     description: Delete a player by id
-#     parameters:
-#       - name: playerId
-#         in: path
-#         required: true
-    
-#     security:
-#       - {}
-#       - bearerAuth: []
-
-#     responses:
-#       "200":
-#         description: Successful operation
-#       "400":
-#         description: Bad Request
-#       "401":
-#         description: UnAauthorized
-#       "500":
-#         description: Internal Server Error
-#   patch:
-#     tags:
-#       - Players
-#     summary: Update a player
-#     description: Update a player
-#     parameters:
-#       - name: playerId
-#         in: path
-#         required: true
-#     requestBody:
-#       required: true
-#       content:
-#         application/json:
-#           schema:
-#             type: object
-#             properties:
-#               firstName:
-#                 type: string
-#                 example: Nambaje
-#               lastName:
-#                 type: string
-#                 example: Edwin
-#               email:
-#                 type: string
-#                 example: nambajedwin@gmail.com
-#               phoneNumber:
-#                 type: string
-#                 example: "250787441511"
-#     security:
-#       - {}
-#       - bearerAuth: []
-
-#     responses:
-#       "200":
-#         description: Successful operation
-#       "400":
-#         description: Bad Request
-#       "401":
-#         description: UnAauthorized
-#       "500":
-#         description: Internal Server Error
-# /api/v1/players/all:
-#   get:
-#     tags:
-#       - Players
-#     summary: Get all players
-#     description: Get all players
-    
-#     security:
-#       - {}
-#       - bearerAuth: []
-
-#     responses:
-#       "200":
-#         description: Successful operation
-#       "400":
-#         description: Bad Request
-#       "401":
-#         description: UnAauthorized
-#       "500":
-#         description: Internal Server Error
-/api/v1/players/getAllProduct:
-  get:
-    tags:
-      - Players
-    summary: Get all products available to play for
-    description: Get all products available to play for
-
-    security:
-      - {}
-      - bearerAuth: []
-      
-    responses:
-      "200":
-        description: Successful operation
-      "400":
-        description: Bad Request
-      "401":
-        description: UnAauthorized
-      "500":
-        description: Internal Server Error
-
-/api/v1/players/playForProduct/{productId}: 
-  post:
-    tags:
-      - Players
-    summary: Play for product by id
-    description: Play for product by id
-    parameters:
-      - name: productId
-        in: path
-        required: true
-
-    security:
-      - {}
-      - bearerAuth: []
-
-    responses:
-      "200":
-        description: Successful operation
-      "400":
-        description: Bad Request
-      "401":
-        description: UnAauthorized
-      "500":
-        description: Internal Server Error
-
-/api/v1/players/pickWinner/{productId}/{drawId}: 
-  post:
-    tags:
-      - Players
-    summary: Pick a winner
-    description: Pick a winner
-    parameters:
-      - name: productId
-        in: path
-        required: true
-      - name: drawId
-        in: path
-        required: true
-
-    security:
-      - {}
-      - bearerAuth: []
-
-    responses:
-      "200":
-        description: Successful operation
-      "400":
-        description: Bad Request
-      "401":
-        description: UnAauthorized
-      "500":
-        description: Internal Server Error
-
-/api/v1/players/confirmWinner/{tokenId}: 
-  get:
-    tags:
-      - Players
-    summary: Confirm a winner
-    description: Confirm a winner
-    parameters:
-      - name: tokenId
-        in: path
-        required: true
-
-    security:
-      - {}
-      - bearerAuth: []
-      
-    responses:
-      "200":
-        description: Successful operation
-      "400":
-        description: Bad Request
-      "401":
-        description: UnAauthorized
-      "500":
-        description: Internal Server Error
-
-/api/v1/players/viewWinner/{tokenId}: 
-  get:
-    tags:
-      - Players
-    summary: Confirm a winner
-    description: Confirm a winner
-    parameters:
-      - name: tokenId
-        in: path
-        required: true
-
-    security:
-      - {}
-      - bearerAuth: []
-      
-    responses:
-      "200":
-        description: Successful operation
-      "400":
-        description: Bad Request
-      "401":
-        description: UnAauthorized
-      "500":
-        description: Internal Server Error
-/api/v1/notifications/register:
-  post:
-    tags:
-      - Notifications
-    summary: Add a notification
-    description: Add a notification
-    requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              userId:
-                type: string
-                example: "4a4ac009-9b4b-4054-9f35-4b11928f0a3d"
-              message:
-                type: string
-                example: "Your account have been successfully created"
-              gatewayResponse:
-                type: string
-                example: "Your account have been successfully created"
-              status:
-                type: boolean
-                example: true
-    security:
-      - {}
-      - bearerAuth: []
-
-    responses:
-      "200":
-        description: Successful operation
-      "400":
-        description: Bad Request
-      "401":
-        description: UnAauthorized
-      "500":
-        description: Internal Server Error
->>>>>>> 380ac2c4b321506e853d71d64c5bc8449ea5fb2f:src/docs/users.yml
 /api/v1/notifications/{notificationId}:
   get:
     tags:
@@ -1938,10 +1348,7 @@
         description: UnAauthorized
       "500":
         description: Internal Server Error
-<<<<<<< HEAD:Admin-App/src/docs/users.yml
         
-=======
->>>>>>> 380ac2c4b321506e853d71d64c5bc8449ea5fb2f:src/docs/users.yml
 /api/v1/notifications/all:
   get:
     tags:

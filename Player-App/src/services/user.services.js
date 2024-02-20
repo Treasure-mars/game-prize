@@ -84,12 +84,8 @@ class User {
     if (identifier) {
       const identifierUser = await users.findOne({
         where: {
-<<<<<<< HEAD:Player-App/src/services/user.services.js
           [Op.or]: [{email: identifier},
             {phoneNumber: identifier}]
-=======
-            phoneNumber
->>>>>>> 380ac2c4b321506e853d71d64c5bc8449ea5fb2f:src/services/admin.services.js
         }
       })
       if (!identifierUser) {
@@ -116,7 +112,6 @@ class User {
             {phoneNumber: identifier}]
         }
       })
-<<<<<<< HEAD:Player-App/src/services/user.services.js
       if (bannedUser) {
         return { message: 'Your account has been banned, contact system admin' }
       }
@@ -125,12 +120,11 @@ class User {
       data.userId = identifierUser.userId
       identifierUser.isLoggedIn = true
       identifierUser.save()
-=======
->>>>>>> 380ac2c4b321506e853d71d64c5bc8449ea5fb2f:src/services/admin.services.js
     }
 
+    const token = Jwt.generateToken(data)
+
     return { data: {
-<<<<<<< HEAD:Player-App/src/services/user.services.js
       identifier: identifier,
       token: token
     }}
@@ -275,105 +269,6 @@ class User {
     }
 
     return { data: {}}
-=======
-      identifier: phoneNumber,
-      message: 'Account have been banned successfully'
-    }}
-  }
-
-  static async banUserDel(data){
-    const { userId } = data
-
-    if (userId) {
-      const user = await BannedUsers.destroy({
-        where: {
-          userId
-        }
-      })
-      if(user !== 1){
-        return { message: 'User not found' }
-      }
-    }
-    return { data: {
-      userId: userId,
-      message: 'Account have been unbanned successfully'
-    }}
-  }
-  
-  static async getBannedUser(page, pageSize){
-    const offset = (page - 1) * pageSize
-
-    const allUsersBanned = await BannedUsers.findAll({
-      limit: pageSize,
-      offset: offset
-    });
-
-    if (allUsersBanned.length === 0) {
-      return { message: 'No banned users' }
-    }
-    return { data: { allUsersBanned, msg: 'success' } }
-  }
-
-  static async getAllUsers(page, pageSize){
-    const offset = (page - 1) * pageSize
-    const allUsers = await users.findAll({
-      limit: pageSize,
-      offset: offset
-    });
-    if (allUsers.length === 0) {
-      return { message: 'No users found' }
-    }
-    return { data: { Users: allUsers, msg: 'success' } }
-  }
-
-  static async deleteUser(data){
-    const { userId } = data
-
-    if (userId) {
-      const user = await users.destroy({
-        where: {
-          userId
-        }
-      })
-      if(user !== 1){
-        return { message: 'User not found' }
-      }
-    }
-    return { data: {
-      userId: userId,
-      message: 'User deleted successfully'
-    }}
-  }
-
-  static async updateUser(params, body){
-    const { userId } = params
-    const { firstName, lastName, email } = body
-
-    if (userId) {
-      const identifierUser = await users.findOne({
-        where: {
-          userId
-        }
-      })
-      if(!identifierUser){
-        return { message: "Profile not found" }
-      }
-      if(firstName){
-        identifierUser.firstName = firstName
-      }
-      if(lastName){
-        identifierUser.lastName = lastName
-      }
-      if(email){
-        identifierUser.email = email
-      }
-      identifierUser.save()
-    }
-    return { data: {
-      userId: userId,
-      message: 'User updated successfully'
-    }}
->>>>>>> 380ac2c4b321506e853d71d64c5bc8449ea5fb2f:src/services/admin.services.js
   }
 
   static async getUser(data){
