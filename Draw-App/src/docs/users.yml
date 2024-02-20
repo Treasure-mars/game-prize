@@ -1,0 +1,349 @@
+/api/v1/users/login:
+  post:
+    tags:
+      - Users
+    summary: Login to your user account
+    description: Login to your user account by providing a phone number or email along with the password.
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              identifier:
+                type: string
+                example: "250787441511"
+              password:
+                type: string
+                example: 12345
+
+    responses:
+      "200":
+        description: Successful operation
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                identifier:
+                  type: string
+                  description: The entered identifier (phone number or email)
+                token:
+                  type: string
+                  description: The generated authentication token
+                message:
+                  type: string
+                  description: Login Successful
+      "400":
+        description: Bad Request
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: Incorrect phone number or password
+      "404":
+        description: Account does not exist
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: Account does not exist
+      "500":
+        description: Internal Server Error
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  description: Internal Server Error message
+
+/api/v1/users/profile:
+  get:
+    tags:
+      - Users
+    summary: get user profile
+    description: get user profile
+    security:
+      - {}
+      - bearerAuth: []
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+  patch:
+    tags:
+      - Users
+    summary: Update user profile
+    description: Update user profile
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              firstName:
+                type: string
+                example: John
+              lastName:
+                type: string
+                example: Doe
+              gender:
+                type: string
+                example: male
+              email:
+                type: string
+                example: john@example.com
+    security:
+      - {}
+      - bearerAuth: []
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+
+/api/v1/users/logout:
+  post:
+    tags:
+      - Users
+    summary: Logout user
+    description: Logout the currently authenticated user, deactivating the active session token.
+    security:
+      - {}
+      - bearerAuth: []
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+
+/api/v1/draws/{drawId}:
+  get:
+    tags:
+      - Draws
+    summary: Get a draw by id
+    description: Get a draw by id
+    parameters:
+      - name: drawId
+        in: path
+        required: true
+
+    security:
+      - {}
+      - bearerAuth: []
+
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+  delete:
+    tags:
+      - Draws
+    summary: Delete a draw by id
+    description: Delete a draw by id
+    parameters:
+      - name: drawId
+        in: path
+        required: true
+    
+    security:
+      - {}
+      - bearerAuth: []
+
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+  patch:
+    tags:
+      - Draws
+    summary: Update a draw
+    description: Update a draw
+    parameters:
+      - name: drawId
+        in: path
+        required: true
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              winnerCount:
+                type: numeric
+                example: 2
+              endDate:
+                type: string
+                format: date-time
+                description: "The end date for the event"
+                example: "2024-02-25"
+    security:
+      - {}
+      - bearerAuth: []
+
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+
+/api/v1/draws/all:
+  get:
+    tags:
+      - Draws
+    summary: Get all draws
+    description: Get all draws
+    
+    security:
+      - {}
+      - bearerAuth: []
+
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+/api/v1/draws/product/{productId}:
+  get:
+    tags:
+      - Draws
+    summary: Get all draws for a product by id
+    description: Get all draws for a product by id
+    parameters:
+      - name: productId
+        in: path
+        required: true
+
+    security:
+      - {}
+      - bearerAuth: []
+
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+
+/api/v1/players/pickWinner/{productId}/{drawId}: 
+  post:
+    tags:
+      - Players
+    summary: Pick a winner
+    description: Pick a winner
+    parameters:
+      - name: productId
+        in: path
+        required: true
+      - name: drawId
+        in: path
+        required: true
+
+    security:
+      - {}
+      - bearerAuth: []
+
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+
+/api/v1/players/confirmWinner/{tokenId}: 
+  get:
+    tags:
+      - Players
+    summary: Confirm a winner
+    description: Confirm a winner
+    parameters:
+      - name: tokenId
+        in: path
+        required: true
+
+    security:
+      - {}
+      - bearerAuth: []
+      
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+
+/api/v1/players/viewWinner/{tokenId}: 
+  get:
+    tags:
+      - Players
+    summary: Confirm a winner
+    description: Confirm a winner
+    parameters:
+      - name: tokenId
+        in: path
+        required: true
+
+    security:
+      - {}
+      - bearerAuth: []
+      
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error

@@ -1,0 +1,98 @@
+import Payments from "../services/payment.services";
+
+const { SMS_TOPIC } = process.env;
+class Payment {
+  static async updatePayment(req,res){
+    try {
+      const {data, message} = await Payments.updatePayment(req.params, req.body)
+      if(message){
+        return res.status(404).json({
+          status: 'fail',
+          message
+        })
+      }
+      if(data){
+        return res.status(200).json({
+          status: 'success',
+          data
+        });
+      }
+    } catch (error) {
+      console.log(`Error on updating payment with id : ${req.params.paymentId}`, error);
+      return res.status(500).json({
+        status: "error",
+        message: error.message
+      });
+    }
+  }
+  static async getPayment(req,res){
+    try {
+      const {data, message} = await Payments.getPayment(req.params)
+      if(message){
+        return res.status(404).json({
+          status: 'fail',
+          message
+        })
+      }
+      if(data){
+        return res.status(200).json({
+          status: 'success',
+          data
+        });
+      }
+    } catch (error) {
+      console.log(`Error on getting payment with id : ${req.params.paymentId}`, error);
+      return res.status(500).json({
+        status: "error",
+        message: error.message
+      });
+    }
+  }
+  static async deletePayment(req,res){
+    try {
+      const {data, message} = await Payments.deletePayment(req.params)
+      if(message){
+        return res.status(404).json({
+          status: 'fail',
+          message
+        })
+      }
+      if(data){
+        return res.status(200).json({
+          status: 'success',
+          data
+        });
+      }
+    } catch (error) {
+      console.log(`Error on deleting payment with id : ${req.params.paymentId}`, error);
+      return res.status(500).json({
+        status: "error",
+        message: error.message
+      });
+    }
+  }
+  static async getAllPayments(req,res){
+    try {
+      const {data, message} = await Payments.getAllPayments()
+      if(message){
+        return res.status(404).json({
+          status: 'fail',
+          message
+        })
+      }
+      if(data){
+        return res.status(200).json({
+          status: 'success',
+          data
+        });
+      }
+    } catch (error) {
+      console.log("Error on getting all payments in: ", error);
+      return res.status(500).json({
+        status: "error",
+        message: error.message
+      });
+    }
+  }
+}
+export default Payment;

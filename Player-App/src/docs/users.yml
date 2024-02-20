@@ -1,0 +1,447 @@
+/api/v1/users/register:
+  post:
+    tags:
+      - Users
+    summary: Create a new user account
+    description: Create a new user account
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              firstName:
+                type: string
+                example: Nambaje
+              lastName:
+                type: string
+                example: Edwin
+              email:
+                type: string
+                example: nambajedwin@gmail.com
+              phoneNumber:
+                type: string
+                example: "250787441511"
+              password:
+                type: string
+                example: 12345
+    responses:
+      "200":
+        description: Successful operation
+        schema:
+          type: object
+          properties:
+            userId:
+              type: string
+            firstName:
+              type: string
+            lastName:
+              type: string
+            email:
+              type: string
+            phoneNumber:
+              type: string
+            tin:
+              type: string
+            nidPassport:
+              type: string
+            password:
+              type: string
+            location:
+              type: object
+              properties:
+                district:
+                  type: string
+                sector:
+                  type: string
+      "400":
+        description: Bad Request
+        schema:
+          type: object
+          properties:
+            error:
+              type: object
+              properties:
+                message:
+                  type: string
+      "500":
+        description: Internal Server Error
+        schema:
+          type: object
+          properties:
+            error:
+              type: object
+              properties:
+                message:
+                  type: string
+
+/api/v1/users/login:
+  post:
+    tags:
+      - Users
+    summary: Login to your user account
+    description: Login to your user account by providing a phone number or email along with the password.
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              identifier:
+                type: string
+                example: "250787441511"
+              password:
+                type: string
+                example: 12345
+
+    responses:
+      "200":
+        description: Successful operation
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                identifier:
+                  type: string
+                  description: The entered identifier (phone number or email)
+                token:
+                  type: string
+                  description: The generated authentication token
+                message:
+                  type: string
+                  description: Login Successful
+      "400":
+        description: Bad Request
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: Incorrect phone number or password
+      "404":
+        description: Account does not exist
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: Account does not exist
+      "500":
+        description: Internal Server Error
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  description: Internal Server Error message
+
+/api/v1/users/verify-otp:
+  post:
+    tags:
+      - Users
+    summary: verify your otp code
+    description: verify your otp code
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              phoneNumber:
+                type: string
+                example: "250787441511"
+              otp:
+                type: number
+                example: 1234
+
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: invalid otp code
+      "403":
+        description: Otp code has expired
+      "500":
+        description: Internal Server Error
+
+/api/v1/users/change-password:
+  patch:
+    tags:
+      - Users
+    summary: change old password
+    description: change old password
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              oldPassword:
+                type: string
+                example: 12345
+              newPassword:
+                type: string
+                example: 12345
+    security:
+      - {}
+      - bearerAuth: []
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+/api/v1/users/forgot-password:
+  post:
+    tags:
+      - Users
+    summary: Forgot password
+    description: Forgot password
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              phoneNumber:
+                type: string
+                example: "250787441511"
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "500":
+        description: Internal Server Error
+/api/v1/users/resend-otp:
+  post:
+    tags:
+      - Users
+    summary: resend otp code
+    description: resend otp code
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              phoneNumber:
+                type: string
+                example: "250787441511"
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "500":
+        description: Internal Server Error
+/api/v1/users/reset-password/{otpCode}:
+  post:
+    tags:
+      - Users
+    summary: Reset password
+    description: Reset password
+    parameters:
+      - name: otpCode
+        in: path
+        required: true
+        description: The otpCode  received on your phone
+        type: number
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              newPassword:
+                type: string
+                example: 12345
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "500":
+        description: Internal Server Error
+/api/v1/users/profile:
+  get:
+    tags:
+      - Users
+    summary: get user profile
+    description: get user profile
+    security:
+      - {}
+      - bearerAuth: []
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+  patch:
+    tags:
+      - Users
+    summary: Update user profile
+    description: Update user profile
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              firstName:
+                type: string
+                example: John
+              lastName:
+                type: string
+                example: Doe
+              gender:
+                type: string
+                example: male
+              email:
+                type: string
+                example: john@example.com
+    security:
+      - {}
+      - bearerAuth: []
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+
+/api/v1/users/logout:
+  post:
+    tags:
+      - Users
+    summary: Logout user
+    description: Logout the currently authenticated user, deactivating the active session token.
+    security:
+      - {}
+      - bearerAuth: []
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+
+/api/v1/players/getAllProduct:
+  get:
+    tags:
+      - Players
+    summary: Get all products available to play for
+    description: Get all products available to play for
+
+    security:
+      - {}
+      - bearerAuth: []
+      
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+
+/api/v1/players/playForProduct/{productId}: 
+  post:
+    tags:
+      - Players
+    summary: Play for product by id
+    description: Play for product by id
+    parameters:
+      - name: productId
+        in: path
+        required: true
+
+    security:
+      - {}
+      - bearerAuth: []
+
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+
+/api/v1/notifications/all:
+  get:
+    tags:
+      - Notifications
+    summary: Get all notifications on specific user
+    description: Get all notifications on specific user
+
+    security:
+      - {}
+      - bearerAuth: []
+
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+
+/api/v1/notifications/{notificationId}:
+  get:
+    tags:
+      - Notifications
+    summary: Get a notification by id on specific user
+    description: Get a notification by id on specific user
+    parameters:
+      - name: notificationId
+        in: path
+        required: true
+
+    security:
+      - {}
+      - bearerAuth: []
+
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
